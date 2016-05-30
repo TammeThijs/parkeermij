@@ -32,15 +32,12 @@ routes laten zien met ~5-10 resultaten, deze kunnen gefilterd worden op kosten o
 - Als route wordt geselecteerd wordt deze getoond in maps.
 
 
-#####OPTIONEEL
+#####optioneel
 - lijst met gebruikte locaties opslaan
 - vertrekpunt aanpassen BINNEN google maps.
 - realtime bezettingsgraad parkeergarage
 - locaties parkeermeters bij locatie
 
-###mogelijke problemen
-- Geen kennis met google maps API.
-- 
 
 ###vergelijkbare apps
 http://www.parkshark.nl/
