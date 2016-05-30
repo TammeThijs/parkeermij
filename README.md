@@ -1,7 +1,7 @@
 # parkeermij
-######Tamme Thijs
-######tammethijs@gmail.com
-######june 2016
+Tamme Thijs
+tammethijs@gmail.com
+june 2016
 
 ##Probleem
 Parkeren in Amsterdam.
