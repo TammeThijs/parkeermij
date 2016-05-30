@@ -1,13 +1,14 @@
 # parkeermij
-# Tamme Thijs
-# tammethijs@gmail.com
-# june 2016
+Tamme Thijs
+tammethijs@gmail.com
+june 2016
 
-#idee
-Probleem: parkeren in Amsterdam.
+#Probleem
+Parkeren in Amsterdam.
 
 #oplossing
 Door middel van een android applicatie mensen die in Amsterdam willen parkeren helpen om een plek te vinden.
+####summary
  - location based; gebruiker kan dmv GPS zijn huidige locatie gebruiken als startpunt, of een locatie kiezen vanuit google maps.
  - API: http://divvapi.parkshark.nl/.
  - Call naar api met positie + tijd, hierop krijg ik een lijst met mogelijke plekken terug.
@@ -20,8 +21,13 @@ Amsterdam. (http://data.amsterdam.nl/dataset/parkeer_api/resource/82e9b535-10f8-
 - Deze data komt binnen als JSON, deze omzetten in objecten.
 
 #onderdelen/opzet
-1) landing page, hier kan de gebruiker selecteren om huidige locatie te gebruiken of zelf een locatie in te voeren. Beide opties
-resulteren in een maps.google
+###landing page
+Hier kan de gebruiker selecteren om huidige locatie te gebruiken of zelf een locatie in te voeren. Beide opties
+resulteren in feedback door een locatie op googlemaps te laten zien.
+
+###maps
+Laten zien welke locatie is ingevuld, en (optioneel) deze via google maps aan te passen.
+
 
  
 
