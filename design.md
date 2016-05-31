@@ -3,8 +3,8 @@
 ####Sketches
 see doc directory
 ####API
-google maps API
-http://divvapi.parkshark.nl/
+- google maps API
+- http://divvapi.parkshark.nl/
 ####Other sources
 - Dagger
 - Butterknife
