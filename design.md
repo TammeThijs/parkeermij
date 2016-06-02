@@ -5,7 +5,7 @@
 - confirm location (google maps, fragment)
 - show routes
 - show route on map (google maps, fragment)
-- settings (optional)
+- settings (optioneel)
 
 ######MVP
 - Elke activitie is opgebouw vanuit een MVP (Model View Presenter) structuur;
@@ -16,7 +16,7 @@
 
 ######models
 - Routes (prijs, afstand, lat, long, etc)
-- Profiel (optional)
+- Profiel (optioneel)
 
 ######overig
 - routes laten zien door middel van een recyclerview (dus ook adapter)
@@ -32,7 +32,7 @@ see doc directory
 - http://divvapi.parkshark.nl/
 
 ###Other sources
-- Dagger
+- Dagger 2
 - Butterknife
 - Retrofit
 - &more
