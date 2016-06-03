@@ -49,6 +49,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest mLocationRequest;
     private LocationObject mLocationObject;
+    private Location mLocation;
 
     @BindView(R.id.location)
     FloatingActionButton mLocationButton;
@@ -84,9 +85,9 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
                 .inject(this);
     }
 
-    private void init(){
+    private void init() {
         mLocationButton.setOnClickListener(this);
-        mLocManager = (LocationManager) getSystemService( Context.LOCATION_SERVICE );
+        mLocManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
         // Build Google API client
         mGoogleApiClient = new GoogleApiClient.Builder(this)
@@ -104,12 +105,10 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
 
     @Override
     public void toggleRipple() {
-        if(!isRipple){
-            startMap();
-//            mRippleBackground.startRippleAnimation();
-//            isRipple = true;
-        }
-        else {
+        if (!isRipple) {
+            mRippleBackground.startRippleAnimation();
+            isRipple = true;
+        } else {
             mRippleBackground.stopRippleAnimation();
             isRipple = false;
         }
@@ -135,7 +134,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
 
     @Override
     public void gpsCheck() {
-        if ( !mLocManager.isProviderEnabled( LocationManager.GPS_PROVIDER ) ) {
+        if (!mLocManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             mLocationButton.setAlpha(.5f);
             mLocationEnabled = false;
         } else {
@@ -149,16 +148,19 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
         mPresenter.onClick(v.getId());
     }
 
-    public void startMap(){
-
+    public void startMap() {
         // user might be a dick and disabled GPS after application start
-       gpsCheck();
+        gpsCheck();
 
         if (!mLocationEnabled) {
             gpsAlert();
-        } else {
-            // get location
+        } else if(mLocation == null){
+            toggleRipple();
             mGoogleApiClient.connect();
+        } else {
+            Log.d(TAG, "startMap: location not null");
+            Intent intent = LocationActivity.newIntent(getApplicationContext(), mLocationObject);
+            startActivity(intent);
         }
     }
 
@@ -166,13 +168,14 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(requestCode == GPS_CHECK){
+        if (requestCode == GPS_CHECK) {
             gpsCheck();
         }
     }
 
     @Override
     public void onConnected(Bundle bundle) {
+        Log.d(TAG, "onConnected: CALLED");
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED &&
@@ -183,28 +186,25 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
             Toast.makeText(MainActivity.this, "Geen permissie", Toast.LENGTH_SHORT).show();
 
         } else {
-            Location location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+            mLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
 
-            if (location == null) {
+            if (mLocation == null) {
                 LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient,
                         mLocationRequest, this);
             } else {
-
-                double currentLatitude = location.getLatitude();
-                double currentLongitude = location.getLongitude();
+                double currentLatitude = mLocation.getLatitude();
+                double currentLongitude = mLocation.getLongitude();
 
                 mLocationObject = new LocationObject(currentLatitude, currentLongitude);
-
-                Intent intent = LocationActivity.newIntent(getApplicationContext(), mLocationObject);
-                startActivity(intent);
-
+                startMap();
             }
         }
     }
 
 
     @Override
-    public void onConnectionSuspended(int i) {}
+    public void onConnectionSuspended(int i) {
+    }
 
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
@@ -225,16 +225,30 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
 
     @Override
     public void onLocationChanged(Location location) {
-        // Do nothing
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        mLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+        Log.d(TAG, "onLocationChanged: CALLED");
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        //Disconnect from API onPause()
         if (mGoogleApiClient.isConnected()) {
             LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
             mGoogleApiClient.disconnect();
+        }       
+        
+        if(isRipple){
+        toggleRipple();
         }
     }
 }

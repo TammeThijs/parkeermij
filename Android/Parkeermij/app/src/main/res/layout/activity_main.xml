@@ -4,10 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorBackgroundDark"
     android:focusable="true"
     android:focusableInTouchMode="true"
-    tools:context="mprog.nl.parkeermij.activities.MainActivity">
+    tools:context="mprog.nl.parkeermij.activities.MainActivity"
+    android:background="@color/colorPrimary">
 
     <com.skyfishjy.library.RippleBackground
         android:id="@+id/ripple"
@@ -43,4 +43,5 @@
                 />
         </android.support.design.widget.TextInputLayout>
     </com.skyfishjy.library.RippleBackground>
+
 </RelativeLayout>
