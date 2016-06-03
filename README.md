@@ -9,15 +9,16 @@ Parkeren in Amsterdam.
 Door middel van een android applicatie mensen die in Amsterdam willen parkeren helpen om een plek te vinden.
 
  - Location based; gebruiker kan dmv GPS zijn huidige locatie gebruiken als startpunt, of een locatie kiezen vanuit google maps.
- - API: http://divvapi.parkshark.nl/.
- - Call naar api met positie + tijd, hierop krijg ik een lijst met mogelijke plekken terug.
+ - Call naar api met positie + tijd, JSON met routes terug.
  - Deze sorteren op tijd en/of kosten en laten zien aan de gebruiker.
- - Gebruiker kan een route selecteren waarna deze getoond wordtin  googlemaps.
+ - Gebruiker kan een route selecteren waarna deze getoond wordt in  googlemaps.
 
 ###data
-- Zoals eerder vermeld gebruik ik http://divvapi.parkshark.nl/, iets wat ondersteund is door de gemeente
+- API routes: http://divvapi.parkshark.nl/, ontwikkeld in samenwerking met gemeente amsterdam
 Amsterdam. (http://data.amsterdam.nl/dataset/parkeer_api/resource/82e9b535-10f8-4d6b-bac0-c2b1aea398b9)
-- Deze data komt binnen als JSON, omzetten in objecten.
+- API google maps.
+- API locatie.
+- (optioneel) API auto complete adressen
 
 ###onderdelen/opzet
 #####landing page
@@ -25,7 +26,7 @@ Hier kan de gebruiker selecteren om huidige locatie te gebruiken of zelf een loc
 resulteren in feedback door een locatie op googlemaps te laten zien.
 
 #####maps
-Locatie laten zien op google maps.
+Locatie laten zien op google maps. (waarschijnlijk weg)
 
 #####routes
 routes laten zien met ~5-10 resultaten, deze kunnen gefilterd worden op kosten of afstand.
@@ -34,7 +35,6 @@ routes laten zien met ~5-10 resultaten, deze kunnen gefilterd worden op kosten o
 
 #####optioneel
 - lijst met gebruikte locaties opslaan
-- vertrekpunt aanpassen BINNEN google maps.
 - realtime bezettingsgraad parkeergarage
 - locaties parkeermeters bij locatie
 

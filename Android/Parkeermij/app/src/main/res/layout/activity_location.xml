@@ -5,13 +5,25 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="mprog.nl.parkeermij.activities.MainActivity">
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        style="@style/Toolbar"
+        >
+    </android.support.v7.widget.Toolbar>
 
 <fragment
     android:id="@+id/map"
-    android:layout_marginTop="100dp"
-    android:layout_marginBottom="100dp"
     android:name="com.google.android.gms.maps.SupportMapFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="mprog.nl.parkeermij.activities.LocationActivity" />
+    android:layout_below="@id/toolbar"
+    />
+
+    <!--<fragment-->
+        <!--android:id="@+id/navigation_drawer"-->
+        <!--android:layout_width="@dimen/navigation_drawer_width"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:layout_gravity="start"-->
+        <!--android:name="mprog.nl.parkeermij.fragments.NavigationDrawerFragment"-->
+        <!--tools:layout="@layout/fragment_navigation_drawer" />-->
 </RelativeLayout>

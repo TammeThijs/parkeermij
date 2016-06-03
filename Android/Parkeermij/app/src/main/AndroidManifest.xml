@@ -28,8 +28,7 @@
 
         <activity
             android:name=".activities.LocationActivity"
-            android:label="@string/title_activity_location"
-            android:theme="@style/Theme.Transparent">
+            android:label="@string/title_activity_location">
         </activity>
     </application>
 

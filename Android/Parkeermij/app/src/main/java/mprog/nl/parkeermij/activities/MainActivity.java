@@ -158,7 +158,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
             toggleRipple();
             mGoogleApiClient.connect();
         } else {
-            Log.d(TAG, "startMap: location not null");
             Intent intent = LocationActivity.newIntent(getApplicationContext(), mLocationObject);
             startActivity(intent);
         }

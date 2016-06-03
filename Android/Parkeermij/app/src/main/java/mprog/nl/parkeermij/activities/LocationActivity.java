@@ -3,7 +3,7 @@ package mprog.nl.parkeermij.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -17,7 +17,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import mprog.nl.parkeermij.R;
 import mprog.nl.parkeermij.models.LocationObject;
 
-public class LocationActivity extends FragmentActivity implements OnMapReadyCallback{
+public class LocationActivity extends AppCompatActivity implements OnMapReadyCallback{
 
     public static final String TAG = "LocationActivity";
     public static final String LOCATION = "location";
@@ -64,7 +64,7 @@ public class LocationActivity extends FragmentActivity implements OnMapReadyCall
 
         //current position
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
-                new LatLng(mLocationObject.getLatitude(), mLocationObject.getLongitude()), 16));
+                new LatLng(mLocationObject.getLatitude(), mLocationObject.getLongitude()), 15));
 
         mMap.addMarker(new MarkerOptions().position(
                 new LatLng(mLocationObject.getLatitude(), mLocationObject.getLongitude())).icon(
