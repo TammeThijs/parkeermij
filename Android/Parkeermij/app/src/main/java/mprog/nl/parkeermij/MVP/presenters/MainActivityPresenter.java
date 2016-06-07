@@ -5,4 +5,5 @@ package mprog.nl.parkeermij.MVP.presenters;
  */
 public interface MainActivityPresenter   {
     void onClick(int id);
+    void getData();
 }

@@ -2,6 +2,8 @@ package mprog.nl.parkeermij.dagger.modules;
 
 import dagger.Module;
 import dagger.Provides;
+import mprog.nl.parkeermij.MVP.interactors.MainActivityInteractor;
+import mprog.nl.parkeermij.MVP.interactors.impl.MainActivityInteractorImpl;
 import mprog.nl.parkeermij.MVP.presenters.MainActivityPresenter;
 import mprog.nl.parkeermij.MVP.presenters.impl.MainActivityPresenterImpl;
 import mprog.nl.parkeermij.MVP.views.MainActivityView;
@@ -27,5 +29,11 @@ public class MainActivityModule {
     public MainActivityPresenter provideMainPresenter(MainActivityPresenterImpl presenter) {
         return presenter;
     }
+
+    @Provides
+    public MainActivityInteractor provideLoginInteractor() {
+        return new MainActivityInteractorImpl();
+    }
+
 
 }

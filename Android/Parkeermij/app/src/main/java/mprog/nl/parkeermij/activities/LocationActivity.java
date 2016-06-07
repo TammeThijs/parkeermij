@@ -14,22 +14,29 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.io.Serializable;
+import java.util.List;
+
 import mprog.nl.parkeermij.R;
 import mprog.nl.parkeermij.models.LocationObject;
+import mprog.nl.parkeermij.models.Route;
 
 public class LocationActivity extends AppCompatActivity implements OnMapReadyCallback{
 
     public static final String TAG = "LocationActivity";
     public static final String LOCATION = "location";
+    public static final String ROUTES = "routes";
     private GoogleMap mMap;
     private LocationObject mLocationObject;
+    private List<Route> mRoutes;
 
 
-    public static Intent newIntent(Context context, LocationObject location) {
+    public static Intent newIntent(Context context, LocationObject location, List<Route> routes) {
         Intent intent = new Intent(context, LocationActivity.class);
         Bundle extras = new Bundle();
 
         extras.putSerializable(LOCATION, location);
+        extras.putSerializable(ROUTES, (Serializable) routes);
         intent.putExtras(extras);
 
         return intent;
@@ -46,14 +53,14 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
 
         Bundle extras = getIntent().getExtras();
         mLocationObject = (LocationObject) extras.getSerializable(LOCATION);
+        mRoutes = (List<Route>) extras.getSerializable(ROUTES);
+
+        Log.d(TAG, "onCreate: routes size = " + mRoutes.size());
 
     }
 
-
-
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        Log.d(TAG, "onMapReady: map is ready");
         mMap = googleMap;
 
         // map settings

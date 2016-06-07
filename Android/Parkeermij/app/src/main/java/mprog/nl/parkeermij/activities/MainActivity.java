@@ -8,8 +8,11 @@ import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -24,6 +27,8 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.skyfishjy.library.RippleBackground;
 
+import java.util.List;
+
 import javax.inject.Inject;
 
 import butterknife.BindView;
@@ -34,14 +39,15 @@ import mprog.nl.parkeermij.R;
 import mprog.nl.parkeermij.dagger.components.DaggerMainActivityComponent;
 import mprog.nl.parkeermij.dagger.modules.MainActivityModule;
 import mprog.nl.parkeermij.models.LocationObject;
+import mprog.nl.parkeermij.models.Route;
 
 public class MainActivity extends AppCompatActivity implements MainActivityView,
         View.OnClickListener, GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
     private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
-    public static final String TAG = "MainActivity";
-    public static final int GPS_CHECK = 999;
+    private static final String TAG = "MainActivity";
+    private static final int GPS_CHECK = 999;
 
     public LocationManager mLocManager;
     private Boolean mLocationEnabled;
@@ -50,12 +56,16 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
     private LocationRequest mLocationRequest;
     private LocationObject mLocationObject;
     private Location mLocation;
+    private List<Route> mRoutes;
 
     @BindView(R.id.location)
     FloatingActionButton mLocationButton;
 
     @BindView(R.id.ripple)
     RippleBackground mRippleBackground;
+
+    @BindView(R.id.coordinatorlayout)
+    CoordinatorLayout mCoordinatorLayout;
 
     @Inject
     MainActivityPresenter mPresenter;
@@ -144,23 +154,45 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
     }
 
     @Override
-    public void onClick(View v) {
-        mPresenter.onClick(v.getId());
+    public void startRoutesActivity(List<Route> routes) {
+            Intent intent = LocationActivity.newIntent(this, mLocationObject, routes);
+            startActivity(intent);
     }
 
-    public void startMap() {
+    @Override
+    public void toggleSnackbar(String message) {
+        Snackbar snackbar = Snackbar.make(mCoordinatorLayout, message, Snackbar.LENGTH_LONG);
+        snackbar.show();
+    }
+
+    @Override
+    public void onClick(View v) {
+        if(isNetworkAvailable()){
+            mPresenter.onClick(v.getId());
+        } else {
+            toggleSnackbar("Er is geen internetverbinding");
+        }
+    }
+
+    public void startRoutes() {
+
         // user might be a dick and disabled GPS after application start
         gpsCheck();
 
         if (!mLocationEnabled) {
             gpsAlert();
-        } else if(mLocation == null){
+        } else if (mLocation == null) {
             toggleRipple();
             mGoogleApiClient.connect();
         } else {
-            Intent intent = LocationActivity.newIntent(getApplicationContext(), mLocationObject);
-            startActivity(intent);
+            toggleRipple();
+            mPresenter.getData();
         }
+    }
+
+    public boolean isNetworkAvailable() {
+        final ConnectivityManager connectivityManager = ((ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE));
+        return connectivityManager.getActiveNetworkInfo() != null && connectivityManager.getActiveNetworkInfo().isConnected();
     }
 
     @Override
@@ -174,7 +206,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
 
     @Override
     public void onConnected(Bundle bundle) {
-        Log.d(TAG, "onConnected: CALLED");
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED &&
@@ -195,14 +226,14 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
                 double currentLongitude = mLocation.getLongitude();
 
                 mLocationObject = new LocationObject(currentLatitude, currentLongitude);
-                startMap();
+                startRoutes();
             }
         }
     }
 
-
     @Override
     public void onConnectionSuspended(int i) {
+        // empty
     }
 
     @Override
@@ -236,6 +267,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
         }
         mLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
         Log.d(TAG, "onLocationChanged: CALLED");
+
     }
 
     @Override
@@ -244,10 +276,10 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
         if (mGoogleApiClient.isConnected()) {
             LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
             mGoogleApiClient.disconnect();
-        }       
-        
-        if(isRipple){
-        toggleRipple();
+        }
+
+        if (isRipple) {
+            toggleRipple();
         }
     }
 }
