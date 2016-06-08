@@ -115,6 +115,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
 
     @Override
     public void toggleRipple() {
+        Log.d(TAG, "toggleRipple: CALLED");
         if (!isRipple) {
             mRippleBackground.startRippleAnimation();
             isRipple = true;
@@ -155,8 +156,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
 
     @Override
     public void startRoutesActivity(List<Route> routes) {
-            Intent intent = LocationActivity.newIntent(this, mLocationObject, routes);
-            startActivity(intent);
+        Intent intent = RoutesActivity.newIntent(this, mLocationObject, routes);
+        startActivity(intent);
     }
 
     @Override
@@ -167,15 +168,16 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
 
     @Override
     public void onClick(View v) {
-        if(isNetworkAvailable()){
-            mPresenter.onClick(v.getId());
+        if (isNetworkAvailable()) { // internet check
+            if (!isRipple) { // check if logic is in progress
+                mPresenter.onClick(v.getId());
+            }
         } else {
             toggleSnackbar("Er is geen internetverbinding");
         }
     }
 
     public void startRoutes() {
-
         // user might be a dick and disabled GPS after application start
         gpsCheck();
 
@@ -185,7 +187,9 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
             toggleRipple();
             mGoogleApiClient.connect();
         } else {
-            toggleRipple();
+            if (!isRipple) {
+                toggleRipple();
+            }
             mPresenter.getData();
         }
     }
