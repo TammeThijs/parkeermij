@@ -39,7 +39,7 @@ import mprog.nl.parkeermij.R;
 import mprog.nl.parkeermij.dagger.components.DaggerMainActivityComponent;
 import mprog.nl.parkeermij.dagger.modules.MainActivityModule;
 import mprog.nl.parkeermij.models.LocationObject;
-import mprog.nl.parkeermij.models.Route;
+import mprog.nl.parkeermij.models.RouteObject;
 
 public class MainActivity extends AppCompatActivity implements MainActivityView,
         View.OnClickListener, GoogleApiClient.ConnectionCallbacks,
@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
     private LocationRequest mLocationRequest;
     private LocationObject mLocationObject;
     private Location mLocation;
-    private List<Route> mRoutes;
+    private List<RouteObject> mRouteObjects;
 
     @BindView(R.id.location)
     FloatingActionButton mLocationButton;
@@ -155,8 +155,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
     }
 
     @Override
-    public void startRoutesActivity(List<Route> routes) {
-        Intent intent = RoutesActivity.newIntent(this, mLocationObject, routes);
+    public void startRoutesActivity(List<RouteObject> routeObjects) {
+        Intent intent = RoutesActivity.newIntent(this, mLocationObject, routeObjects);
         startActivity(intent);
     }
 

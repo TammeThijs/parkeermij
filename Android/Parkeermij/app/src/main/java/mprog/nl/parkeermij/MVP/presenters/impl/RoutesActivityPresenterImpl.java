@@ -11,7 +11,7 @@ import mprog.nl.parkeermij.MVP.presenters.RoutesActivityPresenter;
 import mprog.nl.parkeermij.MVP.views.RoutesActivityView;
 import mprog.nl.parkeermij.activities.RoutesActivity;
 import mprog.nl.parkeermij.models.LocationObject;
-import mprog.nl.parkeermij.models.Route;
+import mprog.nl.parkeermij.models.RouteObject;
 
 /**
  * Created by Tamme on 8-6-2016.
@@ -34,8 +34,9 @@ public class RoutesActivityPresenterImpl implements RoutesActivityPresenter {
             mView.SetMapLocation(savedLocation);
         }
         if (intent.hasExtra(RoutesActivity.ROUTES)){
-            List<Route> savedRoutes = (List<Route>) intent.getExtras().getSerializable(RoutesActivity.ROUTES);
-            // TODO load into list
+            List<RouteObject> savedRouteObjects = (List<RouteObject>) intent.getExtras().getSerializable(RoutesActivity.ROUTES);
+            mView.setRecycerData(savedRouteObjects);
         }
     }
+
 }

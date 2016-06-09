@@ -9,7 +9,7 @@ import java.io.Serializable;
 /**
  * Created by Tamme on 7-6-2016.
  */
-public class Route implements Serializable {
+public class RouteObject implements Serializable {
 
     @SerializedName("dist_in_meters")
     private String mDist;

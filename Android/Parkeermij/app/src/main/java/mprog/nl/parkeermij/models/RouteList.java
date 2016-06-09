@@ -7,22 +7,22 @@ import java.util.List;
 /**
  * Created by Tamme on 7-6-2016.
  *
- * wrapper for Route object *
+ * wrapper for RouteObject object *
  */
 public class RouteList {
 
     @SerializedName("reccommendations")
-    private List<Route> mRouteList;
+    private List<RouteObject> mRouteObjectList;
 
-    public RouteList(List<Route> routeList) {
-        mRouteList = routeList;
+    public RouteList(List<RouteObject> routeObjectList) {
+        mRouteObjectList = routeObjectList;
     }
 
-    public List<Route> getRouteList() {
-        return mRouteList;
+    public List<RouteObject> getRouteObjectList() {
+        return mRouteObjectList;
     }
 
-    public void setRouteList(List<Route> mRouteList) {
-        this.mRouteList = mRouteList;
+    public void setRouteObjectList(List<RouteObject> mRouteObjectList) {
+        this.mRouteObjectList = mRouteObjectList;
     }
 }

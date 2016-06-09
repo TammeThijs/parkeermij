@@ -9,7 +9,7 @@ import mprog.nl.parkeermij.MVP.interfaces.ResponseListener;
 import mprog.nl.parkeermij.MVP.presenters.MainActivityPresenter;
 import mprog.nl.parkeermij.MVP.views.MainActivityView;
 import mprog.nl.parkeermij.R;
-import mprog.nl.parkeermij.models.Route;
+import mprog.nl.parkeermij.models.RouteObject;
 
 /**
  * Created by Tamme on 31-5-2016.
@@ -43,10 +43,10 @@ public class MainActivityPresenterImpl implements MainActivityPresenter {
         mInteractor.getRoutes(mRouteResponseListener);
     }
 
-    private ResponseListener<List<Route>> mRouteResponseListener = new ResponseListener<List<Route>>() {
+    private ResponseListener<List<RouteObject>> mRouteResponseListener = new ResponseListener<List<RouteObject>>() {
         @Override
-        public void success(List<Route> routes) {
-            mView.startRoutesActivity(routes);
+        public void success(List<RouteObject> routeObjects) {
+            mView.startRoutesActivity(routeObjects);
         }
 
         @Override

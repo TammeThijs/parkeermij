@@ -1,5 +1,5 @@
 <resources>
     <string name="app_name">Parkeermij</string>
     <string name="title_activity_location">Map</string>
-    <string name="route_error">Fout bij ophalen routes</string>
+    <string name="route_error">Fout bij ophalen routeObjects</string>
 </resources>

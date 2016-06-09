@@ -6,5 +6,6 @@
     <color name="colorBackgroundLight">#fff</color>
     <color name="colorBackgroundDark">#c9c9c9</color>
     <color name="colorAccent">#FF4081</color>
-    <color name="textHintColor">#808080</color>
+    <color name="colorText">#212121</color>
+    <color name="colorTextLight">#757575</color>
 </resources>

@@ -6,7 +6,7 @@ import java.util.List;
 
 import mprog.nl.parkeermij.MVP.interactors.MainActivityInteractor;
 import mprog.nl.parkeermij.MVP.interfaces.ResponseListener;
-import mprog.nl.parkeermij.models.Route;
+import mprog.nl.parkeermij.models.RouteObject;
 import mprog.nl.parkeermij.models.RouteList;
 import mprog.nl.parkeermij.network.ApiManager;
 import retrofit2.Call;
@@ -18,12 +18,12 @@ import retrofit2.Response;
  */
 public class MainActivityInteractorImpl implements MainActivityInteractor {
 
-    private ResponseListener<List<Route>> mContactsResponseListener;
+    private ResponseListener<List<RouteObject>> mContactsResponseListener;
     private RouteList mList;
     public static final String TAG = "Netwerk";
 
     @Override
-    public void getRoutes(ResponseListener<List<Route>> listener) {
+    public void getRoutes(ResponseListener<List<RouteObject>> listener) {
 
         mContactsResponseListener = listener;
 
@@ -32,8 +32,8 @@ public class MainActivityInteractorImpl implements MainActivityInteractor {
             @Override
             public void onResponse(Call<RouteList> call, Response<RouteList> response) {
                 if (response.isSuccessful()) {
-                    mList = new RouteList(response.body().getRouteList());
-                    mContactsResponseListener.success(mList.getRouteList());
+                    mList = new RouteList(response.body().getRouteObjectList());
+                    mContactsResponseListener.success(mList.getRouteObjectList());
                 } else {
                     mContactsResponseListener.fail("Error getting routes: "+response.message());
                 }
