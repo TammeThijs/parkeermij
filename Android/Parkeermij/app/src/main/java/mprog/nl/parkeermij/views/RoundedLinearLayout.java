@@ -7,6 +7,8 @@ import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.widget.LinearLayout;
 
+import mprog.nl.parkeermij.R;
+
 
 public class RoundedLinearLayout extends LinearLayout {
 
@@ -29,8 +31,8 @@ public class RoundedLinearLayout extends LinearLayout {
     }
 
     private void init() {
-
-        mCornerRadius = 6;
+        mCornerRadius = getContext().getResources().
+                getDimensionPixelSize(R.dimen.corner_radius);
         setWillNotDraw(false);
     }
 

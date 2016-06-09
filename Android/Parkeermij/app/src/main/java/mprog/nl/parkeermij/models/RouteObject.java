@@ -20,7 +20,6 @@ public class RouteObject implements Serializable {
     @SerializedName("name")
     private String mName;
 
-    @Nullable
     @SerializedName("automat_number")
     private String mAutomatNum;
 
@@ -71,7 +70,7 @@ public class RouteObject implements Serializable {
         return mAutomatNum;
     }
 
-    public void setAutomatNum(@Nullable String automatNum) {
+    public void setAutomatNum(String automatNum) {
         mAutomatNum = automatNum;
     }
 
@@ -121,5 +120,16 @@ public class RouteObject implements Serializable {
 
     public void setGarageUrl(String garageUrl) {
         mGarageUrl = garageUrl;
+    }
+
+    /**
+     * custom getter used for parsing string coordinates to doubles
+     * @return LocationObject
+     */
+    public LocationObject getGPSLocation(){
+        double lat = Double.parseDouble(getLatitude());
+        double lon = Double.parseDouble(getLongitude());
+
+        return new LocationObject(lat, lon);
     }
 }
