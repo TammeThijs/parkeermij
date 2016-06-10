@@ -39,4 +39,10 @@
 - Data ophalen uit intent
 - Opzet Recyclerview
 
+#####day9
+- Recyclerview geimplementeerd
+- static google maps in listitem
+- onClick listitem geeft id, transition, view en locationObject mee.
+- laat route zien (rechte lijn...)
+
 
