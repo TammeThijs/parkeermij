@@ -1,7 +1,10 @@
 package mprog.nl.parkeermij.adapters;
 
+import android.annotation.TargetApi;
 import android.content.Context;
+import android.os.Build;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +18,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import mprog.nl.parkeermij.R;
+import mprog.nl.parkeermij.models.LocationObject;
 import mprog.nl.parkeermij.models.RouteObject;
 
 /**
@@ -25,19 +29,24 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.MainViewHold
     public static final String TAG = "RouteAdapter";
     private List<RouteObject> mRoutes;
     private Context mContext;
-    private final String URL_MAPS_STATIC = "https://maps.googleapis.com/maps/api/staticmap?zoom="+
-            "15&size=400x400&center=";
+    private LocationObject mLocationObject;
+    private String URL_MAPS_STATIC = "";
+    private OnClickListener mOnClickListener;
 
     public RouteAdapter(Context context) {
         mContext = context;
+        URL_MAPS_STATIC = mContext.getString(R.string.maps_static_url);
     }
 
-    public void setItems(List<RouteObject> routes) {
+    public void setItems(List<RouteObject> routes, OnClickListener listener,
+                         LocationObject locationObject) {
         mRoutes = routes;
+        mOnClickListener = listener;
+        mLocationObject = locationObject;
     }
 
-    public interface onClick {
-        void onClick(int position, View view);
+    public interface OnClickListener {
+        void onClick(LocationObject location, RouteObject routeObject , View view, String transition);
     }
 
     @Override
@@ -49,8 +58,9 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.MainViewHold
     }
 
     @Override
-    public void onBindViewHolder(MainViewHolder holder, int position) {
+    public void onBindViewHolder(MainViewHolder holder, final int position) {
         final MainViewHolder viewHolder = holder;
+        final RouteObject mRoute = getItem(position);
         String mSringLocation;
 
         viewHolder.mCosts.setText(new StringBuilder().append("€").append(mRoutes.get(position)
@@ -68,6 +78,15 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.MainViewHold
                 .fit()
                 .centerCrop()
                 .into(holder.mMapView);
+
+        holder.mMapView.setOnClickListener(new View.OnClickListener() {
+            
+            @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+            @Override
+            public void onClick(View v) {
+                mOnClickListener.onClick(mLocationObject, mRoute, v ,v.getTransitionName());
+            }
+        });
     }
 
     @Override

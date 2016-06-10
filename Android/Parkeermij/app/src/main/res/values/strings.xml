@@ -2,4 +2,6 @@
     <string name="app_name">Parkeermij</string>
     <string name="title_activity_location">Map</string>
     <string name="route_error">Fout bij ophalen routeObjects</string>
+    <string name="maps_static_url"><![CDATA[https://maps.googleapis.com/maps/api/staticmap?zoom=15&size=400x400&center=]]></string>
+    <string name="title_activity_maps">Map</string>
 </resources>

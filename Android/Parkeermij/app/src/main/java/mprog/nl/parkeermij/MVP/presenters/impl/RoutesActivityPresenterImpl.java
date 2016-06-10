@@ -1,6 +1,7 @@
 package mprog.nl.parkeermij.MVP.presenters.impl;
 
 import android.content.Intent;
+import android.view.View;
 
 import java.util.List;
 
@@ -29,14 +30,20 @@ public class RoutesActivityPresenterImpl implements RoutesActivityPresenter {
 
     @Override
     public void init(Intent intent) {
+        LocationObject savedLocation = null;
         if(intent.hasExtra(RoutesActivity.LOCATION)){
-            LocationObject savedLocation = (LocationObject) intent.getExtras().getSerializable(RoutesActivity.LOCATION);
-            mView.SetMapLocation(savedLocation);
+            savedLocation = (LocationObject) intent.getExtras().getSerializable(RoutesActivity.LOCATION);
         }
-        if (intent.hasExtra(RoutesActivity.ROUTES)){
+        if (intent.hasExtra(RoutesActivity.ROUTES) && savedLocation != null){
             List<RouteObject> savedRouteObjects = (List<RouteObject>) intent.getExtras().getSerializable(RoutesActivity.ROUTES);
-            mView.setRecycerData(savedRouteObjects);
+            mView.setRecycerData(savedRouteObjects, savedLocation);
         }
+    }
+
+    @Override
+    public void startMap(LocationObject location, RouteObject routeObject, View view, String transition) {
+        mView.startMap(location, routeObject, view,
+                transition);
     }
 
 }

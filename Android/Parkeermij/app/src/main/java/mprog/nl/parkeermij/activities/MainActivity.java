@@ -38,15 +38,14 @@ import mprog.nl.parkeermij.MVP.views.MainActivityView;
 import mprog.nl.parkeermij.R;
 import mprog.nl.parkeermij.dagger.components.DaggerMainActivityComponent;
 import mprog.nl.parkeermij.dagger.modules.MainActivityModule;
-import mprog.nl.parkeermij.models.LocationObject;
 import mprog.nl.parkeermij.models.RouteObject;
 
 public class MainActivity extends AppCompatActivity implements MainActivityView,
         View.OnClickListener, GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
-    private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
     private static final String TAG = "MainActivity";
+    private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
     private static final int GPS_CHECK = 999;
 
     public LocationManager mLocManager;
@@ -54,9 +53,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
     private Boolean isRipple = false;
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest mLocationRequest;
-    private LocationObject mLocationObject;
     private Location mLocation;
-    private List<RouteObject> mRouteObjects;
 
     @BindView(R.id.location)
     FloatingActionButton mLocationButton;
@@ -156,7 +153,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
 
     @Override
     public void startRoutesActivity(List<RouteObject> routeObjects) {
-        Intent intent = RoutesActivity.newIntent(this, mLocationObject, routeObjects);
+        Intent intent = RoutesActivity.newIntent(this, mLocation, routeObjects);
         startActivity(intent);
     }
 
@@ -177,6 +174,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
         }
     }
 
+    @Override
     public void startRoutes() {
         // user might be a dick and disabled GPS after application start
         gpsCheck();
@@ -226,10 +224,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
                 LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient,
                         mLocationRequest, this);
             } else {
-                double currentLatitude = mLocation.getLatitude();
-                double currentLongitude = mLocation.getLongitude();
-
-                mLocationObject = new LocationObject(currentLatitude, currentLongitude);
                 startRoutes();
             }
         }
@@ -270,7 +264,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
             return;
         }
         mLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-        Log.d(TAG, "onLocationChanged: CALLED");
+        Log.d(TAG, "onLocationChanged: CALLED -> lat: "+mLocation.getLatitude());
 
     }
 
