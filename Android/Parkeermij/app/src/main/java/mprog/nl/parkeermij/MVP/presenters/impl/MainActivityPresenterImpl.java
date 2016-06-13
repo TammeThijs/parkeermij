@@ -9,6 +9,7 @@ import mprog.nl.parkeermij.MVP.interfaces.ResponseListener;
 import mprog.nl.parkeermij.MVP.presenters.MainActivityPresenter;
 import mprog.nl.parkeermij.MVP.views.MainActivityView;
 import mprog.nl.parkeermij.R;
+import mprog.nl.parkeermij.models.LocationObject;
 import mprog.nl.parkeermij.models.RouteObject;
 
 /**
@@ -39,8 +40,8 @@ public class MainActivityPresenterImpl implements MainActivityPresenter {
     }
 
     @Override
-    public void getData() {
-        mInteractor.getRoutes(mRouteResponseListener);
+    public void getData(LocationObject locationObject) {
+        mInteractor.getRoutes(mRouteResponseListener, locationObject);
     }
 
     private ResponseListener<List<RouteObject>> mRouteResponseListener = new ResponseListener<List<RouteObject>>() {

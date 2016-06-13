@@ -1,18 +1,18 @@
 ﻿#####day1
-- startup
-- idee schaven
-- proposal maken
+- Startup
+- Idee schaven
+- Proposal maken
 - Android studio prepareren
 
 #####day2
 - Design document
-- opzetten project binnen android studio
+- Opzetten project binnen android studio
 - MVP (dagger) initialiseren
 - Informatie opzoeken mbt googlemaps API
 
 #####day3
 - Design document afgemaakt
-- standup
+- Standup
 - Google maps geïmplementeerd
 
 #####day4 
@@ -21,8 +21,8 @@
 - Locatie (gps) checks
 
 #####day5
-- code cleanup
-- meeting op UvA
+- Code cleanup
+- Meeting op UvA
 
 #####day6
 - Retrofit geïmplementeerd
@@ -32,7 +32,7 @@
 #####day7 
 - JSON omgezet naar objecten.
 - MVP logica gecombineerd met retrofit
-- data via intent meesturen naar tweede activity
+- Data via intent meesturen naar tweede activity
 
 #####day8
 - RoutesActivity
@@ -40,9 +40,15 @@
 - Opzet Recyclerview
 
 #####day9
-- Recyclerview geimplementeerd
-- static google maps in listitem
-- onClick listitem geeft id, transition, view en locationObject mee.
-- laat route zien (rechte lijn...)
+- Recyclerview geïmplementeerd
+- Static google maps in listitem
+- OnClick listitem geeft id, transition, view en locationObject mee.
+- Laat route zien (rechte lijn...)
 
+#####day10
+- Presentaties
+
+#####day11
+- Doet nu API request op basis van eigen locatie ipv hardcoded.
+- Setup navigationdrawer
 

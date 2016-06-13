@@ -38,6 +38,7 @@ import mprog.nl.parkeermij.MVP.views.MainActivityView;
 import mprog.nl.parkeermij.R;
 import mprog.nl.parkeermij.dagger.components.DaggerMainActivityComponent;
 import mprog.nl.parkeermij.dagger.modules.MainActivityModule;
+import mprog.nl.parkeermij.models.LocationObject;
 import mprog.nl.parkeermij.models.RouteObject;
 
 public class MainActivity extends AppCompatActivity implements MainActivityView,
@@ -128,7 +129,9 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
                 .setCancelable(false)
                 .setPositiveButton("Ja", new DialogInterface.OnClickListener() {
                     public void onClick(@SuppressWarnings("unused") final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
-                        startActivityForResult(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS), GPS_CHECK);
+                        startActivityForResult(
+                                new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS),
+                                GPS_CHECK);
                     }
                 })
                 .setNegativeButton("Nee", new DialogInterface.OnClickListener() {
@@ -188,13 +191,15 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
             if (!isRipple) {
                 toggleRipple();
             }
-            mPresenter.getData();
+            mPresenter.getData(new LocationObject(mLocation.getLatitude(), mLocation.getLongitude()));
         }
     }
 
     public boolean isNetworkAvailable() {
-        final ConnectivityManager connectivityManager = ((ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE));
-        return connectivityManager.getActiveNetworkInfo() != null && connectivityManager.getActiveNetworkInfo().isConnected();
+        final ConnectivityManager connectivityManager = ((ConnectivityManager)
+                this.getSystemService(Context.CONNECTIVITY_SERVICE));
+        return connectivityManager.getActiveNetworkInfo() != null &&
+                connectivityManager.getActiveNetworkInfo().isConnected();
     }
 
     @Override
@@ -253,7 +258,10 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
 
     @Override
     public void onLocationChanged(Location location) {
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
+                        != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
             // here to request the missing permissions, and then overriding

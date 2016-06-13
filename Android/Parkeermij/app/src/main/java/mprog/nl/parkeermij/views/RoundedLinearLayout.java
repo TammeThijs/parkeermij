@@ -9,7 +9,6 @@ import android.widget.LinearLayout;
 
 import mprog.nl.parkeermij.R;
 
-
 public class RoundedLinearLayout extends LinearLayout {
 
     private Path mPath;

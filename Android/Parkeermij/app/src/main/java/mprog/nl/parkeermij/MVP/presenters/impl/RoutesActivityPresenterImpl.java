@@ -31,10 +31,10 @@ public class RoutesActivityPresenterImpl implements RoutesActivityPresenter {
     @Override
     public void init(Intent intent) {
         LocationObject savedLocation = null;
-        if(intent.hasExtra(RoutesActivity.LOCATION)){
+        if (intent.hasExtra(RoutesActivity.LOCATION)) {
             savedLocation = (LocationObject) intent.getExtras().getSerializable(RoutesActivity.LOCATION);
         }
-        if (intent.hasExtra(RoutesActivity.ROUTES) && savedLocation != null){
+        if (intent.hasExtra(RoutesActivity.ROUTES) && savedLocation != null) {
             List<RouteObject> savedRouteObjects = (List<RouteObject>) intent.getExtras().getSerializable(RoutesActivity.ROUTES);
             mView.setRecycerData(savedRouteObjects, savedLocation);
         }
@@ -45,5 +45,4 @@ public class RoutesActivityPresenterImpl implements RoutesActivityPresenter {
         mView.startMap(location, routeObject, view,
                 transition);
     }
-
 }

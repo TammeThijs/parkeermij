@@ -6,6 +6,7 @@ import java.util.List;
 
 import mprog.nl.parkeermij.MVP.interactors.MainActivityInteractor;
 import mprog.nl.parkeermij.MVP.interfaces.ResponseListener;
+import mprog.nl.parkeermij.models.LocationObject;
 import mprog.nl.parkeermij.models.RouteObject;
 import mprog.nl.parkeermij.models.RouteList;
 import mprog.nl.parkeermij.network.ApiManager;
@@ -23,11 +24,13 @@ public class MainActivityInteractorImpl implements MainActivityInteractor {
     public static final String TAG = "Netwerk";
 
     @Override
-    public void getRoutes(ResponseListener<List<RouteObject>> listener) {
+    public void getRoutes(ResponseListener<List<RouteObject>> listener, LocationObject
+            locationObject) {
 
         mContactsResponseListener = listener;
 
-        Call<RouteList> call = ApiManager.getParkService().getTest();
+        Call<RouteList> call = ApiManager.getParkService().getTest(String.valueOf(locationObject
+                .getLatitude()),String.valueOf(locationObject.getLongitude()));
         call.enqueue(new Callback<RouteList>() {
             @Override
             public void onResponse(Call<RouteList> call, Response<RouteList> response) {

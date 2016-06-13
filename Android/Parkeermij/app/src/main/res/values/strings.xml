@@ -4,4 +4,10 @@
     <string name="route_error">Fout bij ophalen routeObjects</string>
     <string name="maps_static_url"><![CDATA[https://maps.googleapis.com/maps/api/staticmap?zoom=15&size=400x400&center=]]></string>
     <string name="title_activity_maps">Map</string>
+    <string name="title_activity_navigation_test">NavigationTestActivity</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
 </resources>

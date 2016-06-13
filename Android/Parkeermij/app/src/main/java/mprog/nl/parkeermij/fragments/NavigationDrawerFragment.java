@@ -24,13 +24,11 @@
 //import android.widget.AdapterView;
 //import android.widget.ListView;
 //
-//import com.upc.service.R;
-//import com.upc.service.adapters.MenuAdapter;
-//
 //import java.util.Arrays;
 //
+//import butterknife.BindView;
 //import butterknife.ButterKnife;
-//import butterknife.InjectView;
+//import mprog.nl.parkeermij.R;
 //
 ///**
 // * Fragment used for managing interactions for and presentation of a navigation drawer.
@@ -62,9 +60,10 @@
 //
 //    private DrawerLayout mDrawerLayout;
 //
-//    @InjectView(R.id.drawer_list)
+//    @BindView(R.id.drawer_list)
 //    protected ListView mDrawerListView;
-//    private MenuAdapter mAdapter;
+//
+////    private MenuAdapter mAdapter;
 //    private View mFragmentContainerView;
 //
 //    private int mCurrentSelectedPosition = 0;
@@ -107,7 +106,7 @@
 //        View view = inflater.inflate(
 //                R.layout.fragment_navigation_drawer, container, false);
 //
-//        ButterKnife.inject(this, view);
+//        ButterKnife.bind(this, view);
 //
 //        init();
 //
@@ -116,19 +115,8 @@
 //
 //    private void init() {
 //
-//        getFragmentManager().beginTransaction()
-//                .replace(R.id.container_address, new AddressFragment(), AddressFragment.FRAGMENT_TAG)
-//                .commit();
 //
 //        mDrawerListView.setOnItemClickListener(onItemClickListener);
-//
-//        mAdapter = new MenuAdapter(getActivity(), Arrays.asList(new Integer[]{
-//                R.string.menu_overview,
-//                R.string.menu_faq,
-//                R.string.menu_videos,
-//                R.string.menu_tour,
-//                R.string.menu_contact}));
-//
 //        mDrawerListView.setAdapter(mAdapter);
 //        mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
 //    }

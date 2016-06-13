@@ -3,6 +3,7 @@ package mprog.nl.parkeermij.MVP.interactors;
 import java.util.List;
 
 import mprog.nl.parkeermij.MVP.interfaces.ResponseListener;
+import mprog.nl.parkeermij.models.LocationObject;
 import mprog.nl.parkeermij.models.RouteObject;
 
 /**
@@ -10,5 +11,5 @@ import mprog.nl.parkeermij.models.RouteObject;
  */
 public interface MainActivityInteractor {
 
-    void getRoutes(ResponseListener<List<RouteObject>> listener);
+    void getRoutes(ResponseListener<List<RouteObject>> listener, LocationObject locationObject);
 }
