@@ -2,11 +2,11 @@ package mprog.nl.parkeermij.dagger.modules;
 
 import dagger.Module;
 import dagger.Provides;
-import mprog.nl.parkeermij.MVP.interactors.MainActivityInteractor;
-import mprog.nl.parkeermij.MVP.interactors.impl.MainActivityInteractorImpl;
-import mprog.nl.parkeermij.MVP.presenters.MainActivityPresenter;
-import mprog.nl.parkeermij.MVP.presenters.impl.MainActivityPresenterImpl;
-import mprog.nl.parkeermij.MVP.views.MainActivityView;
+import mprog.nl.parkeermij.MVP.interactors.StartUpActivityInteractor;
+import mprog.nl.parkeermij.MVP.interactors.impl.StartUpActivityInteractorImpl;
+import mprog.nl.parkeermij.MVP.presenters.StartUpActivityPresenter;
+import mprog.nl.parkeermij.MVP.presenters.impl.StartUpActivityPresenterImpl;
+import mprog.nl.parkeermij.MVP.views.StartUpActivityView;
 
 /**
  * Created by Tamme on 31-5-2016.
@@ -14,25 +14,25 @@ import mprog.nl.parkeermij.MVP.views.MainActivityView;
 @Module
 public class MainActivityModule {
 
-    private MainActivityView mView;
+    private StartUpActivityView mView;
 
-    public MainActivityModule(MainActivityView view) {
+    public MainActivityModule(StartUpActivityView view) {
         mView = view;
     }
 
     @Provides
-    public MainActivityView provideMainView() {
+    public StartUpActivityView provideMainView() {
         return mView;
     }
 
     @Provides
-    public MainActivityPresenter provideMainPresenter(MainActivityPresenterImpl presenter) {
+    public StartUpActivityPresenter provideMainPresenter(StartUpActivityPresenterImpl presenter) {
         return presenter;
     }
 
     @Provides
-    public MainActivityInteractor provideLoginInteractor() {
-        return new MainActivityInteractorImpl();
+    public StartUpActivityInteractor provideLoginInteractor() {
+        return new StartUpActivityInteractorImpl();
     }
 
 

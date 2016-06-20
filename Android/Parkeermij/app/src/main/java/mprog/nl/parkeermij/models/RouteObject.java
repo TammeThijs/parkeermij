@@ -41,6 +41,19 @@ public class RouteObject implements Serializable {
     @SerializedName("garage_infourl")
     private String mGarageUrl;
 
+    // Custom getter to return readable values
+    public String getDistString() {
+        Double distance = Double.parseDouble(mDist);
+
+        if(distance > 1000){
+            distance = distance/1000;
+            distance = (double)Math.round(distance * 10d) / 10d;
+            return String.valueOf((distance/1000)) + "km";
+        } else {
+            return String.valueOf(distance) + "m";
+        }
+    }
+
     public String getDist() {
         return mDist;
     }
@@ -122,10 +135,8 @@ public class RouteObject implements Serializable {
         mGarageUrl = garageUrl;
     }
 
-    /**
-     * custom getter used for parsing string coordinates to doubles
-     * @return LocationObject
-     */
+
+     //  custom getter used for parsing string coordinates to doubles
     public LocationObject getGPSLocation(){
         double lat = Double.parseDouble(getLatitude());
         double lon = Double.parseDouble(getLongitude());

@@ -24,7 +24,7 @@ public class ApiManager {
     private static final OkHttpClient client = new OkHttpClient.Builder().build();
 
     private static final Retrofit PARK_ADAPTER = new Retrofit.Builder()
-            .baseUrl("http://divvapi.parkshark.nl/")
+            .baseUrl("http://divvapi.parkshark.nl")
             .client(client)
             .addConverterFactory(GsonConverterFactory.create(gson))
             .build();

@@ -2,6 +2,7 @@ package mprog.nl.parkeermij.adapters;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,6 +13,9 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import butterknife.BindView;
@@ -27,6 +31,7 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.MainViewHold
 
     public static final String TAG = "RouteAdapter";
     private List<RouteObject> mRoutes;
+    private List<RouteObject> mRoutesAll;
     private Context mContext;
     private LocationObject mLocationObject;
     private String URL_MAPS_STATIC = "";
@@ -39,9 +44,32 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.MainViewHold
 
     public void setItems(List<RouteObject> routes, OnClickListener listener,
                          LocationObject locationObject) {
-        mRoutes = routes;
+        mRoutesAll = routes;
         mOnClickListener = listener;
         mLocationObject = locationObject;
+        filterRoutes();
+    }
+
+    public void filterRoutes(){
+        mRoutes = new ArrayList<>();
+
+        // load settings
+        SharedPreferences settings = mContext.getSharedPreferences("settings", 0);
+        boolean isCheckedMeter = settings.getBoolean("meterbox", false);
+        boolean isCheckedGarage = settings.getBoolean("garagebox", false);
+
+        // filter items
+        for (RouteObject route: mRoutesAll) {
+            boolean isChecked = route.getType().equals("garage") ? isCheckedGarage : isCheckedMeter;
+            if(isChecked){
+                mRoutes.add(route);
+            }
+        }
+
+        RouteComperator comperator = new RouteComperator();
+        Collections.sort(mRoutes, comperator);
+
+        notifyDataSetChanged();
     }
 
     public interface OnClickListener {
@@ -65,7 +93,7 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.MainViewHold
         viewHolder.mCosts.setText(new StringBuilder().append("€").append(mRoutes.get(position)
                 .getCost()).toString());
         viewHolder.mDistance.setText(new StringBuilder().append(mRoutes.get(position)
-                .getDist()).append("m").toString());
+                .getDistString()).toString());
         viewHolder.mTypeVal.setText(mRoutes.get(position).getType());
 
         // setup string for static maps
@@ -123,6 +151,17 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.MainViewHold
         public MainViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+        }
+    }
+
+    public class RouteComperator implements Comparator<RouteObject> {
+
+        @Override
+        public int compare(RouteObject route1, RouteObject route2) {
+            Double cost1 = Double.parseDouble(route1.getCost());
+            Double cost2 = Double.parseDouble(route2.getCost());
+
+            return cost1.compareTo(cost2);
         }
     }
 }

@@ -7,7 +7,7 @@ import mprog.nl.parkeermij.models.RouteObject;
 /**
  * Created by Tamme on 31-5-2016.
  */
-public interface MainActivityView {
+public interface StartUpActivityView {
     void toggleRipple();
     void startRoutes();
     void gpsCheck();

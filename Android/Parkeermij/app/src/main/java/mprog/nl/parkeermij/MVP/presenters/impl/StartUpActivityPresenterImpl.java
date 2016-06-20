@@ -4,10 +4,10 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import mprog.nl.parkeermij.MVP.interactors.MainActivityInteractor;
+import mprog.nl.parkeermij.MVP.interactors.StartUpActivityInteractor;
 import mprog.nl.parkeermij.MVP.interfaces.ResponseListener;
-import mprog.nl.parkeermij.MVP.presenters.MainActivityPresenter;
-import mprog.nl.parkeermij.MVP.views.MainActivityView;
+import mprog.nl.parkeermij.MVP.presenters.StartUpActivityPresenter;
+import mprog.nl.parkeermij.MVP.views.StartUpActivityView;
 import mprog.nl.parkeermij.R;
 import mprog.nl.parkeermij.models.LocationObject;
 import mprog.nl.parkeermij.models.RouteObject;
@@ -15,15 +15,15 @@ import mprog.nl.parkeermij.models.RouteObject;
 /**
  * Created by Tamme on 31-5-2016.
  */
-public class MainActivityPresenterImpl implements MainActivityPresenter {
+public class StartUpActivityPresenterImpl implements StartUpActivityPresenter {
 
     public static final String TAG = "MainPresenter";
 
-    private MainActivityView mView;
-    private MainActivityInteractor mInteractor;
+    private StartUpActivityView mView;
+    private StartUpActivityInteractor mInteractor;
 
     @Inject
-    public MainActivityPresenterImpl(MainActivityView view, MainActivityInteractor interactor) {
+    public StartUpActivityPresenterImpl(StartUpActivityView view, StartUpActivityInteractor interactor) {
         mView = view;
         mInteractor = interactor;
     }

@@ -4,7 +4,7 @@ import android.util.Log;
 
 import java.util.List;
 
-import mprog.nl.parkeermij.MVP.interactors.MainActivityInteractor;
+import mprog.nl.parkeermij.MVP.interactors.StartUpActivityInteractor;
 import mprog.nl.parkeermij.MVP.interfaces.ResponseListener;
 import mprog.nl.parkeermij.models.LocationObject;
 import mprog.nl.parkeermij.models.RouteObject;
@@ -17,7 +17,7 @@ import retrofit2.Response;
 /**
  * Created by Tamme on 31-5-2016.
  */
-public class MainActivityInteractorImpl implements MainActivityInteractor {
+public class StartUpActivityInteractorImpl implements StartUpActivityInteractor {
 
     private ResponseListener<List<RouteObject>> mContactsResponseListener;
     private RouteList mList;
@@ -44,6 +44,7 @@ public class MainActivityInteractorImpl implements MainActivityInteractor {
 
             @Override
             public void onFailure(Call<RouteList> call, Throwable t) {
+
                 Log.d(TAG, "onFailure: FAILURE  " + t.getMessage());
             }
         });

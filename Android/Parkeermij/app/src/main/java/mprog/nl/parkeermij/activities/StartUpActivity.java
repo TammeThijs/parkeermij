@@ -33,19 +33,19 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import mprog.nl.parkeermij.MVP.presenters.MainActivityPresenter;
-import mprog.nl.parkeermij.MVP.views.MainActivityView;
+import mprog.nl.parkeermij.MVP.presenters.StartUpActivityPresenter;
+import mprog.nl.parkeermij.MVP.views.StartUpActivityView;
 import mprog.nl.parkeermij.R;
 import mprog.nl.parkeermij.dagger.components.DaggerMainActivityComponent;
 import mprog.nl.parkeermij.dagger.modules.MainActivityModule;
 import mprog.nl.parkeermij.models.LocationObject;
 import mprog.nl.parkeermij.models.RouteObject;
 
-public class MainActivity extends AppCompatActivity implements MainActivityView,
+public class StartUpActivity extends AppCompatActivity implements StartUpActivityView,
         View.OnClickListener, GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
-    private static final String TAG = "MainActivity";
+    private static final String TAG = "StartUpActivity";
     private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
     private static final int GPS_CHECK = 999;
 
@@ -66,11 +66,11 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
     CoordinatorLayout mCoordinatorLayout;
 
     @Inject
-    MainActivityPresenter mPresenter;
+    StartUpActivityPresenter mPresenter;
 
 
     public static Intent newIntent(Context context) {
-        Intent intent = new Intent(context, MainActivity.class);
+        Intent intent = new Intent(context, StartUpActivity.class);
         return intent;
     }
 
@@ -109,11 +109,12 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
                 .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
                 .setInterval(10 * 1000)        // 10 seconds, in milliseconds
                 .setFastestInterval(1000); // 1 second, in milliseconds
+
+        startRoutes();
     }
 
     @Override
     public void toggleRipple() {
-        Log.d(TAG, "toggleRipple: CALLED");
         if (!isRipple) {
             mRippleBackground.startRippleAnimation();
             isRipple = true;
@@ -125,7 +126,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
 
     private void gpsAlert() {
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Voor deze functie moet uw GPS aanstaan, wilt u deze nu aanzetten?")
+        builder.setMessage("Voor de huidige locatie moet uw GPS aanstaan, wilt u deze nu aanzetten?")
                 .setCancelable(false)
                 .setPositiveButton("Ja", new DialogInterface.OnClickListener() {
                     public void onClick(@SuppressWarnings("unused") final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
@@ -156,7 +157,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
 
     @Override
     public void startRoutesActivity(List<RouteObject> routeObjects) {
-        Intent intent = RoutesActivity.newIntent(this, mLocation, routeObjects);
+        Intent intent = BaseActivity.newIntent(this, mLocation, routeObjects);
         startActivity(intent);
     }
 
@@ -220,7 +221,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
                         != PackageManager.PERMISSION_GRANTED) {
 
             // TODO testen op 6.0+ device
-            Toast.makeText(MainActivity.this, "Geen permissie", Toast.LENGTH_SHORT).show();
+            Toast.makeText(StartUpActivity.this, "Geen permissie", Toast.LENGTH_SHORT).show();
 
         } else {
             mLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);

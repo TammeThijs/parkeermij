@@ -10,7 +10,7 @@ import retrofit2.http.Query;
  */
 public interface ParkService {
 
-    @GET("/apitest.jsp?action=plan&dur=2&opt_routes=y&opt_routes_ret=n&opt_am=n&opt_rec=y")
+    @GET("/rest/plan?dur=2&opt_routes=y&opt_routes_ret=n&opt_am=y&opt_rec=y")
     Call<RouteList> getTest(
             @Query("to_lat") String lat,
             @Query("to_lon") String lon

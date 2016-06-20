@@ -52,3 +52,19 @@
 - Doet nu API request op basis van eigen locatie ipv hardcoded.
 - Setup navigationdrawer
 
+#####day12 
+- switched naar gebruik van fragments
+- maps fragment toegevoegd waar parkeerlocaties op worden getoond
+
+#####day13
+- fragments afgemaakt
+- menu toegevoegd met opties per fragment
+- gekeken naar lifecycle fragment ivm behoud van map
+
+#####day14
+- afwezig ivm zaken familie
+
+#####day15
+-presentaties
+
+

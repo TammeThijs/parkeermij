@@ -5,10 +5,10 @@ package mprog.nl.parkeermij.dagger.components;
  */
 
 import dagger.Component;
-import mprog.nl.parkeermij.activities.RoutesActivity;
+import mprog.nl.parkeermij.activities.BaseActivity;
 import mprog.nl.parkeermij.dagger.modules.RoutesActivityModule;
 
 @Component(modules = RoutesActivityModule.class)
 public interface RoutesActivityComponent {
-    void inject(RoutesActivity activity);
+    void inject(BaseActivity activity);
 }

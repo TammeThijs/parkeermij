@@ -13,12 +13,12 @@
         android:background="@color/colorPrimary"
         android:focusable="true"
         android:focusableInTouchMode="true"
-        tools:context="mprog.nl.parkeermij.activities.MainActivity">
+        tools:context=".activities.StartUpActivity">
 
         <com.skyfishjy.library.RippleBackground
             android:id="@+id/ripple"
             android:layout_width="match_parent"
-            android:layout_height="450dp"
+            android:layout_height="match_parent"
             app:rb_color="@color/colorPrimaryDark"
             app:rb_radius="32dp"
             app:rb_rippleAmount="6"
@@ -30,29 +30,6 @@
                 android:layout_height="64dp"
                 android:layout_centerInParent="true"
                 android:src="@drawable/ic_room_white_36dp" />
-
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/textwrapper"
-                android:layout_width="200dp"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/location"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="60dp">
-                <EditText
-                    android:id="@+id/input_email"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Adres"
-                    android:inputType="textEmailAddress" />
-            </android.support.design.widget.TextInputLayout>
-            <Button
-                android:layout_width="200dp"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/textwrapper"
-                android:layout_centerHorizontal="true"
-                style="@style/AppTheme.Button.Main"
-                android:text="search"/>
-
         </com.skyfishjy.library.RippleBackground>
     </RelativeLayout>
 </android.support.design.widget.CoordinatorLayout>

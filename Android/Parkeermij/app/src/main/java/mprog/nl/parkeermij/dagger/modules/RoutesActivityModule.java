@@ -2,11 +2,11 @@ package mprog.nl.parkeermij.dagger.modules;
 
 import dagger.Module;
 import dagger.Provides;
-import mprog.nl.parkeermij.MVP.interactors.RoutesActivityInteractor;
-import mprog.nl.parkeermij.MVP.interactors.impl.RoutesActivityInteractorImpl;
-import mprog.nl.parkeermij.MVP.presenters.RoutesActivityPresenter;
-import mprog.nl.parkeermij.MVP.presenters.impl.RoutesActivityPresenterImpl;
-import mprog.nl.parkeermij.MVP.views.RoutesActivityView;
+import mprog.nl.parkeermij.MVP.interactors.BaseActivityInteractor;
+import mprog.nl.parkeermij.MVP.interactors.impl.BaseActivityInteractorImpl;
+import mprog.nl.parkeermij.MVP.presenters.BaseActivityPresenter;
+import mprog.nl.parkeermij.MVP.presenters.impl.BaseActivityPresenterImpl;
+import mprog.nl.parkeermij.MVP.views.BaseActivityView;
 
 /**
  * Created by Tamme on 31-5-2016.
@@ -14,25 +14,25 @@ import mprog.nl.parkeermij.MVP.views.RoutesActivityView;
 @Module
 public class RoutesActivityModule {
 
-    private RoutesActivityView mView;
+    private BaseActivityView mView;
 
-    public RoutesActivityModule(RoutesActivityView view) {
+    public RoutesActivityModule(BaseActivityView view) {
         mView = view;
     }
 
     @Provides
-    public RoutesActivityView provideRoutesView() {
+    public BaseActivityView provideRoutesView() {
         return mView;
     }
 
     @Provides
-    public RoutesActivityPresenter provideRoutesPresenter(RoutesActivityPresenterImpl presenter) {
+    public BaseActivityPresenter provideRoutesPresenter(BaseActivityPresenterImpl presenter) {
         return presenter;
     }
 
     @Provides
-    public RoutesActivityInteractor provideRoutesInteractor() {
-        return new RoutesActivityInteractorImpl();
+    public BaseActivityInteractor provideRoutesInteractor() {
+        return new BaseActivityInteractorImpl();
     }
 
 

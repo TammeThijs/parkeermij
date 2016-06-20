@@ -9,7 +9,7 @@ import mprog.nl.parkeermij.models.RouteObject;
 /**
  * Created by Tamme on 31-5-2016.
  */
-public interface MainActivityInteractor {
+public interface StartUpActivityInteractor {
 
     void getRoutes(ResponseListener<List<RouteObject>> listener, LocationObject locationObject);
 }

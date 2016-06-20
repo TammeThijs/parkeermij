@@ -5,10 +5,10 @@ package mprog.nl.parkeermij.dagger.components;
  */
 
 import dagger.Component;
-import mprog.nl.parkeermij.activities.MainActivity;
+import mprog.nl.parkeermij.activities.StartUpActivity;
 import mprog.nl.parkeermij.dagger.modules.MainActivityModule;
 
 @Component(modules = MainActivityModule.class)
 public interface MainActivityComponent {
-    void inject(MainActivity activity);
+    void inject(StartUpActivity activity);
 }

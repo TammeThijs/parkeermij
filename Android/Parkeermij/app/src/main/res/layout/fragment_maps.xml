@@ -6,7 +6,7 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:transitionName="transition"
-              tools:context="mprog.nl.parkeermij.activities.MapsActivity"
+              tools:context=".fragments.MapsFragment"
     >
 
     <fragment
@@ -14,10 +14,9 @@
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="mprog.nl.parkeermij.activities.MapsActivity"
-        tools:cameraZoom="14"
+        tools:context=".fragments.MapsFragment"
         tools:mapType="normal"
-        tools:liteMode="true"/>
+        />
 
 </LinearLayout>
 
