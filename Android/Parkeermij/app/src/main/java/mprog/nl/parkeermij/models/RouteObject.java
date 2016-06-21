@@ -46,9 +46,9 @@ public class RouteObject implements Serializable {
         Double distance = Double.parseDouble(mDist);
 
         if(distance > 1000){
+
             distance = distance/1000;
-            distance = (double)Math.round(distance * 10d) / 10d;
-            return String.valueOf((distance/1000)) + "km";
+            return String.format("%.2f", distance) + "km";
         } else {
             return String.valueOf(distance) + "m";
         }

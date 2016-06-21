@@ -48,7 +48,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
 
     private GoogleMap mMap;
     private PolygonHelper mPolygonHelper;
-    private List<List<LatLng>> mAreaList;
+    private List<List<List<LatLng>>> mAreaList;
     private SupportMapFragment mSupportMapFragment;
     private LocationObject startLocation;
     private List<RouteObject> parkLocations;
@@ -93,9 +93,6 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
             mSupportMapFragment.getMapAsync(this);
         }
 
-        mAreaList = mPolygonHelper.parseXML();
-        Log.d(TAG, "onCreateView: SIZE LIST: "+mAreaList.size());
-
         return view;
     }
 
@@ -105,7 +102,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
         mMap.setOnCameraChangeListener(this);
         mMap.setMyLocationEnabled(true);
 
-        setMarkers();        
+        setMarkers();
         // set maps to current location
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(startLocation.getLatitude(),
                 startLocation.getLongitude()), 14));
@@ -141,36 +138,47 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
         setAreas();
     }
 
-    public void setAreas(){
+    public void setAreas() {
 
-        int normal=0;
-        int transparent=0;
+        int normal = 0;
+        int transparent = 0;
+        mAreaList = mPolygonHelper.parseXML();
 
+        for (int zone = 0; zone <mAreaList.size(); zone++) {
 
-        for (int i = 0; i < mAreaList.size() ; i++) {
-            if(i < 2){
+            if (zone == 0) {
                 normal = ContextCompat.getColor(getContext(), R.color.zone1);
                 transparent = ContextCompat.getColor(getContext(), R.color.zone1Transparent);
-            } else if(i < 7){
+            } else if (zone == 1) {
                 normal = ContextCompat.getColor(getContext(), R.color.zone2);
                 transparent = ContextCompat.getColor(getContext(), R.color.zone2Transparent);
-            } else if(i < 16){
+            } else if (zone == 2) {
                 normal = ContextCompat.getColor(getContext(), R.color.zone3);
                 transparent = ContextCompat.getColor(getContext(), R.color.zone3Transparent);
-            } else if(i < 31){
+            } else if (zone == 3) {
                 normal = ContextCompat.getColor(getContext(), R.color.zone4);
                 transparent = ContextCompat.getColor(getContext(), R.color.zone4Transparent);
-            }else if(i < 50){
+            } else if (zone == 4) {
                 normal = ContextCompat.getColor(getContext(), R.color.zone5);
                 transparent = ContextCompat.getColor(getContext(), R.color.zone5Transparent);
+            } else if (zone == 5) {
+                normal = ContextCompat.getColor(getContext(), R.color.zone6);
+                transparent = ContextCompat.getColor(getContext(), R.color.zone6Transparent);
+            } else if (zone == 6){
+                normal = ContextCompat.getColor(getContext(), R.color.zone7);
+                transparent = ContextCompat.getColor(getContext(), R.color.zone7Transparent);
+            }
+
+            for (int subzone = 0; subzone < mAreaList.get(zone).size(); subzone++) {
+
+                Polygon polygon = mMap.addPolygon(new PolygonOptions()
+                        .addAll(mAreaList.get(zone).get(subzone))
+                        .strokeWidth(3)
+                        .strokeColor(normal)
+                        .fillColor(transparent));
             }
 
 
-            Polygon polygon = mMap.addPolygon(new PolygonOptions()
-                    .addAll(mAreaList.get(i))
-                    .strokeWidth(3)
-                    .strokeColor(normal)
-                    .fillColor(transparent));
         }
 
     }
@@ -190,6 +198,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
 
     /**
      * Avoids user zooming out too far
+     *
      * @param cameraPosition
      */
     @Override

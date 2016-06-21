@@ -21,6 +21,8 @@
     <color name="zone5Transparent">#66EF6C00</color>
     <color name="zone6">#9E9D24</color>
     <color name="zone6Transparent">#669E9D24</color>
+    <color name="zone7">#2E7D32</color>
+    <color name="zone7Transparent">#662E7D32</color>
 
 </resources>
 

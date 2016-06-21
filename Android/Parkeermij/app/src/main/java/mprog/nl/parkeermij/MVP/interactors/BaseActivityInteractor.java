@@ -5,5 +5,4 @@ package mprog.nl.parkeermij.MVP.interactors;
  */
 public interface BaseActivityInteractor {
 
-
 }

@@ -29,10 +29,16 @@ public class ApiManager {
             .addConverterFactory(GsonConverterFactory.create(gson))
             .build();
 
-    private static final ParkService PARKSHARK_SERVICE = PARK_ADAPTER.create(ParkService.class);
+    private static final Retrofit PARKMETER_ADAPTER = new Retrofit.Builder()
+            .baseUrl("https://opendata.rdw.nl")
+            .client(client)
+            .addConverterFactory(GsonConverterFactory.create(gson))
+            .build();
+
+
+    private static final ParkService PARK_SERVICE = PARK_ADAPTER.create(ParkService.class);
 
     public static ParkService getParkService() {
-        return PARKSHARK_SERVICE;
+        return PARK_SERVICE;
     }
-
 }

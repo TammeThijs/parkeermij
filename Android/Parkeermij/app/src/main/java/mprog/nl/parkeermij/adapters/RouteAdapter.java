@@ -66,8 +66,9 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.MainViewHold
             }
         }
 
-        RouteComperator comperator = new RouteComperator();
-        Collections.sort(mRoutes, comperator);
+        CostComperator costComperator = new CostComperator();
+        DistComperator distComperator = new DistComperator();
+        Collections.sort(mRoutes, distComperator);
 
         notifyDataSetChanged();
     }
@@ -154,7 +155,7 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.MainViewHold
         }
     }
 
-    public class RouteComperator implements Comparator<RouteObject> {
+    public class CostComperator implements Comparator<RouteObject> {
 
         @Override
         public int compare(RouteObject route1, RouteObject route2) {
@@ -164,4 +165,17 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.MainViewHold
             return cost1.compareTo(cost2);
         }
     }
+
+    public class DistComperator implements Comparator<RouteObject> {
+
+        @Override
+        public int compare(RouteObject route1, RouteObject route2) {
+            Double dist1 = Double.parseDouble(route1.getDist());
+            Double dist2 = Double.parseDouble(route2.getDist());
+
+            return dist1.compareTo(dist2);
+        }
+    }
+
+
 }
