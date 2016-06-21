@@ -10,17 +10,17 @@
     <color name="colorTextDark">#424242</color>
     <color name="colorTextLight">#757575</color>
     <color name="zone1">#6A1B9A</color>
-    <color name="zone1Transparent">#996A1B9A</color>
+    <color name="zone1Transparent">#666A1B9A</color>
     <color name="zone2">#00E5FF</color>
-    <color name="zone2Transparent">#9900E5FF</color>
+    <color name="zone2Transparent">#6600E5FF</color>
     <color name="zone3">#D81B60</color>
-    <color name="zone3Transparent">#99D81B60</color>
+    <color name="zone3Transparent">#66D81B60</color>
     <color name="zone4">#C62828</color>
-    <color name="zone4Transparent">#99C62828</color>
+    <color name="zone4Transparent">#66C62828</color>
     <color name="zone5">#EF6C00</color>
-    <color name="zone5Transparent">#99EF6C00</color>
+    <color name="zone5Transparent">#66EF6C00</color>
     <color name="zone6">#9E9D24</color>
-    <color name="zone6Transparent">#999E9D24</color>
+    <color name="zone6Transparent">#669E9D24</color>
 
 </resources>
 

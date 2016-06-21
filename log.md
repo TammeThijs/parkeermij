@@ -66,5 +66,16 @@
 
 #####day15
 -presentaties
+- API toont kuren
+
+#####day16
+- API geeft geen meters meer terug, alleen garages
+- onderzoeken welke veranderingen nu in de app moeten worden gemaakt om deze toch interessant te houden
+- gekozen om via (hardcoded!) google maps parkeerzones te laten zien binnen amsterdam
+- Dataset RDW MAP: https://opendata.rdw.nl/Parkeren/Open-Data-Parkeren-KAART-PARKEERGEBIEDEN/7sqe-3mca
+- Dataset RDW Polygon points: https://opendata.rdw.nl/Parkeren/Open-Data-Parkeren-GEOMETRIE-GEBIED/nsk3-v9n7
+- Tariefen amsterdam: https://www.amsterdam.nl/parkeren-verkeer/parkeertarieven/
+
+
 
 
