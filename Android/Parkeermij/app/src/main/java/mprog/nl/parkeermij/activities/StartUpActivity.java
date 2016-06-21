@@ -1,6 +1,7 @@
 package mprog.nl.parkeermij.activities;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -10,6 +11,7 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -18,7 +20,6 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -39,6 +40,7 @@ import mprog.nl.parkeermij.R;
 import mprog.nl.parkeermij.dagger.components.DaggerMainActivityComponent;
 import mprog.nl.parkeermij.dagger.modules.MainActivityModule;
 import mprog.nl.parkeermij.models.LocationObject;
+import mprog.nl.parkeermij.models.MeterObject;
 import mprog.nl.parkeermij.models.RouteObject;
 
 public class StartUpActivity extends AppCompatActivity implements StartUpActivityView,
@@ -49,12 +51,14 @@ public class StartUpActivity extends AppCompatActivity implements StartUpActivit
     private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
     private static final int GPS_CHECK = 999;
 
-    public LocationManager mLocManager;
+    private LocationManager mLocManager;
     private Boolean mLocationEnabled;
     private Boolean isRipple = false;
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest mLocationRequest;
     private Location mLocation;
+    private List<RouteObject> mRouteObjects = null;
+    private List<MeterObject> mMeterObjects = null;
 
     @BindView(R.id.location)
     FloatingActionButton mLocationButton;
@@ -113,6 +117,9 @@ public class StartUpActivity extends AppCompatActivity implements StartUpActivit
         startRoutes();
     }
 
+    /**
+     * Used for feedback to user that app is handling data
+     */
     @Override
     public void toggleRipple() {
         if (!isRipple) {
@@ -124,6 +131,9 @@ public class StartUpActivity extends AppCompatActivity implements StartUpActivit
         }
     }
 
+    /**
+     * Allert message if GPS is currently not enabled or available.
+     */
     private void gpsAlert() {
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("Voor de huidige locatie moet uw GPS aanstaan, wilt u deze nu aanzetten?")
@@ -144,23 +154,45 @@ public class StartUpActivity extends AppCompatActivity implements StartUpActivit
         alert.show();
     }
 
+    /**
+     * Checks is GPS is available
+     */
     @Override
     public void gpsCheck() {
         if (!mLocManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            // Dissable button change layout so that user knows its unavailable
             mLocationButton.setAlpha(.5f);
             mLocationEnabled = false;
         } else {
+            // Enable button
             mLocationEnabled = true;
             mLocationButton.setAlpha(1f);
         }
     }
 
     @Override
-    public void startRoutesActivity(List<RouteObject> routeObjects) {
-        Intent intent = BaseActivity.newIntent(this, mLocation, routeObjects);
-        startActivity(intent);
+    public void startRoutesActivity(@Nullable List<RouteObject> routeObjects,
+                                    @Nullable List<MeterObject> meterObjects) {
+
+        if(routeObjects != null){
+            mRouteObjects = routeObjects;
+        }
+
+        if(meterObjects != null){
+            mMeterObjects = meterObjects;
+        }
+
+        if(mMeterObjects != null && mRouteObjects != null){
+            Intent intent = BaseActivity.newIntent(this, mLocation, mRouteObjects, mMeterObjects);
+            startActivity(intent);
+        }
+
     }
 
+    /**
+     * Shows snackbar with custom message
+     * @param message
+     */
     @Override
     public void toggleSnackbar(String message) {
         Snackbar snackbar = Snackbar.make(mCoordinatorLayout, message, Snackbar.LENGTH_LONG);
@@ -174,18 +206,18 @@ public class StartUpActivity extends AppCompatActivity implements StartUpActivit
                 mPresenter.onClick(v.getId());
             }
         } else {
-            toggleSnackbar("Er is geen internetverbinding");
+            toggleSnackbar(getString(R.string.string_no_internet));
         }
     }
 
     @Override
     public void startRoutes() {
-        // user might be a dick and disabled GPS after application start
+        // double check GPS, user might have turned it off after initial check
         gpsCheck();
 
         if (!mLocationEnabled) {
             gpsAlert();
-        } else if (mLocation == null) {
+        } else if (mLocation == null) { // check if location exists
             toggleRipple();
             mGoogleApiClient.connect();
         } else {
@@ -196,6 +228,11 @@ public class StartUpActivity extends AppCompatActivity implements StartUpActivit
         }
     }
 
+    /**
+     * Method that checks if device has network acces.
+     * Source: stackoverflow.
+     * @return boolean
+     */
     public boolean isNetworkAvailable() {
         final ConnectivityManager connectivityManager = ((ConnectivityManager)
                 this.getSystemService(Context.CONNECTIVITY_SERVICE));
@@ -203,33 +240,44 @@ public class StartUpActivity extends AppCompatActivity implements StartUpActivit
                 connectivityManager.getActiveNetworkInfo().isConnected();
     }
 
+    /**
+     * Catches result from GPS activity
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == GPS_CHECK) {
+        // check result
+        if (requestCode == GPS_CHECK && resultCode == Activity.RESULT_OK ) {
             gpsCheck();
         }
     }
 
+    /**
+     * Is called after connection with GoogleApiClient, checks permissions and if the GPS
+     * returned a valid location.
+     * @param bundle
+     */
     @Override
     public void onConnected(Bundle bundle) {
-
+        // permissions
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED &&
                 ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
                         != PackageManager.PERMISSION_GRANTED) {
 
-            // TODO testen op 6.0+ device
-            Toast.makeText(StartUpActivity.this, "Geen permissie", Toast.LENGTH_SHORT).show();
-
         } else {
+            // try to populate location object
             mLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-
             if (mLocation == null) {
+                // keep asking API for location when location is null
                 LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient,
                         mLocationRequest, this);
             } else {
+                // start next activity
                 startRoutes();
             }
         }
@@ -237,12 +285,17 @@ public class StartUpActivity extends AppCompatActivity implements StartUpActivit
 
     @Override
     public void onConnectionSuspended(int i) {
-        // empty
+        // required method
     }
 
+    /**
+     * Called after GoogleAPIClient failed
+     * Source: http://stackoverflow.com/questions/17811720/googleplayservicesutil-error-dialog-button-does-nothing
+     * @param connectionResult
+     */
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
-
+        // test connection
         if (connectionResult.hasResolution()) {
             try {
                 // Start an Activity that tries to resolve the error
@@ -252,13 +305,14 @@ public class StartUpActivity extends AppCompatActivity implements StartUpActivit
                 e.printStackTrace();
             }
         } else {
-            Log.e("Error", "LocationObject services connection failed: " +
-                    connectionResult.getErrorCode());
+            // Snackbar fail connection GoogleApiClient
+            toggleSnackbar(connectionResult.getErrorMessage());
         }
     }
 
     @Override
     public void onLocationChanged(Location location) {
+        // permissioncheck
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED &&
                 ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
@@ -272,13 +326,14 @@ public class StartUpActivity extends AppCompatActivity implements StartUpActivit
             // for ActivityCompat#requestPermissions for more details.
             return;
         }
+        Log.d(TAG, "onLocationChanged: CALLED");
+        // update locationObject
         mLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-        Log.d(TAG, "onLocationChanged: CALLED -> lat: "+mLocation.getLatitude());
-
     }
 
     @Override
     protected void onPause() {
+        Log.d(TAG, "onPause: CALLED");
         super.onPause();
         if (mGoogleApiClient.isConnected()) {
             LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);

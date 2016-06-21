@@ -1,8 +1,5 @@
 package mprog.nl.parkeermij.network;
 
-import java.util.List;
-
-import mprog.nl.parkeermij.models.MeterObject;
 import mprog.nl.parkeermij.models.RouteList;
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -18,12 +15,4 @@ public interface ParkService {
             @Query("to_lat") String lat,
             @Query("to_lon") String lon
     );
-
-    @GET("/resource/gni9-a379.json")
-    Call<List<MeterObject>> getMeters(
-
-    );
-
-
-
 }

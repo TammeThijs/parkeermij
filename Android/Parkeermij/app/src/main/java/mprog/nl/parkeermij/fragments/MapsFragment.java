@@ -43,6 +43,14 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
     public static final String FRAGMENT_TAG = "MAPS_FRAGMENT";
     public static final float MAX_ZOOM = 12.0f;
 
+    public static final int ZONE1 = 0;
+    public static final int ZONE2 = 1;
+    public static final int ZONE3 = 2;
+    public static final int ZONE4 = 3;
+    public static final int ZONE5 = 4;
+    public static final int ZONE6 = 5;
+    public static final int ZONE7 = 6;
+
     @BindView(R.id.content)
     LinearLayout mContent;
 
@@ -144,29 +152,29 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
         int transparent = 0;
         mAreaList = mPolygonHelper.parseXML();
 
-        for (int zone = 0; zone <mAreaList.size(); zone++) {
+        for (int zone = 0; zone < mAreaList.size(); zone++) {
 
-            if (zone == 0) {
+            if (zone == ZONE1) {
                 normal = ContextCompat.getColor(getContext(), R.color.zone1);
-                transparent = ContextCompat.getColor(getContext(), R.color.zone1Transparent);
-            } else if (zone == 1) {
+                transparent = ContextCompat.getColor(getContext(), R.color.zone1_transparent);
+            } else if (zone == ZONE2) {
                 normal = ContextCompat.getColor(getContext(), R.color.zone2);
-                transparent = ContextCompat.getColor(getContext(), R.color.zone2Transparent);
-            } else if (zone == 2) {
+                transparent = ContextCompat.getColor(getContext(), R.color.zone2_transparent);
+            } else if (zone == ZONE3) {
                 normal = ContextCompat.getColor(getContext(), R.color.zone3);
-                transparent = ContextCompat.getColor(getContext(), R.color.zone3Transparent);
-            } else if (zone == 3) {
+                transparent = ContextCompat.getColor(getContext(), R.color.zone3_transparent);
+            } else if (zone == ZONE4) {
                 normal = ContextCompat.getColor(getContext(), R.color.zone4);
-                transparent = ContextCompat.getColor(getContext(), R.color.zone4Transparent);
-            } else if (zone == 4) {
+                transparent = ContextCompat.getColor(getContext(), R.color.zone4_transparent);
+            } else if (zone == ZONE5) {
                 normal = ContextCompat.getColor(getContext(), R.color.zone5);
-                transparent = ContextCompat.getColor(getContext(), R.color.zone5Transparent);
-            } else if (zone == 5) {
+                transparent = ContextCompat.getColor(getContext(), R.color.zone5_transparent);
+            } else if (zone == ZONE6) {
                 normal = ContextCompat.getColor(getContext(), R.color.zone6);
-                transparent = ContextCompat.getColor(getContext(), R.color.zone6Transparent);
-            } else if (zone == 6){
+                transparent = ContextCompat.getColor(getContext(), R.color.zone6_transparent);
+            } else if (zone == ZONE7) {
                 normal = ContextCompat.getColor(getContext(), R.color.zone7);
-                transparent = ContextCompat.getColor(getContext(), R.color.zone7Transparent);
+                transparent = ContextCompat.getColor(getContext(), R.color.zone7_transparent);
             }
 
             for (int subzone = 0; subzone < mAreaList.get(zone).size(); subzone++) {
@@ -177,10 +185,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
                         .strokeColor(normal)
                         .fillColor(transparent));
             }
-
-
         }
-
     }
 
 

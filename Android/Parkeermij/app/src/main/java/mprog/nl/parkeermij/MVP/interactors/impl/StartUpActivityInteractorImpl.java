@@ -1,15 +1,13 @@
 package mprog.nl.parkeermij.MVP.interactors.impl;
 
-import android.util.Log;
-
 import java.util.List;
 
 import mprog.nl.parkeermij.MVP.interactors.StartUpActivityInteractor;
 import mprog.nl.parkeermij.MVP.interfaces.ResponseListener;
 import mprog.nl.parkeermij.models.LocationObject;
 import mprog.nl.parkeermij.models.MeterObject;
-import mprog.nl.parkeermij.models.RouteObject;
 import mprog.nl.parkeermij.models.RouteList;
+import mprog.nl.parkeermij.models.RouteObject;
 import mprog.nl.parkeermij.network.ApiManager;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -28,49 +26,51 @@ public class StartUpActivityInteractorImpl implements StartUpActivityInteractor 
     @Override
     public void getRoutes(ResponseListener<List<RouteObject>> listener, LocationObject
             locationObject) {
-
+        // set listener
         mRouteResponseListener = listener;
 
+        // call asychronous
         Call<RouteList> call = ApiManager.getParkService().getGarages(String.valueOf(locationObject
-                .getLatitude()),String.valueOf(locationObject.getLongitude()));
+                .getLatitude()), String.valueOf(locationObject.getLongitude()));
         call.enqueue(new Callback<RouteList>() {
             @Override
             public void onResponse(Call<RouteList> call, Response<RouteList> response) {
                 if (response.isSuccessful()) {
                     mList = new RouteList(response.body().getRouteObjectList());
-                    mRouteResponseListener.success(mList.getRouteObjectList());
+                    mRouteResponseListener.success(mList.getRouteObjectList()); // call succes from listener
                 } else {
-                    mRouteResponseListener.fail("Error getting routes: "+response.message());
+                    mRouteResponseListener.fail("Error getting data"); // call fail from listener
                 }
             }
 
             @Override
             public void onFailure(Call<RouteList> call, Throwable t) {
-
-                Log.d(TAG, "onFailure: FAILURE  " + t.getMessage());
+                mRouteResponseListener.fail("Error getting data: "+t.getMessage()); // call fail from listener
             }
         });
     }
 
     @Override
     public void getParkMeters(ResponseListener<List<MeterObject>> listener, LocationObject locationObject) {
-
+        // set listener
         mMeterResponseListener = listener;
 
-        Call<List<MeterObject>> call = ApiManager.getParkService().getMeters();
+        // call asychronous
+        Call<List<MeterObject>> call = ApiManager.getMeterService().getMeters();
         call.enqueue(new Callback<List<MeterObject>>() {
             @Override
             public void onResponse(Call<List<MeterObject>> call, Response<List<MeterObject>> response) {
                 if (response.isSuccessful()) {
-                    Log.d(TAG, "onResponse meter: SUCCES" + response.body().size());
+                    mMeterResponseListener.success(response.body()); // call succes from listener
+
                 } else {
-                    Log.d(TAG, "onResponse meter: FAILURE");
+                    mMeterResponseListener.fail("Error getting data"); // call fail from listener
                 }
             }
 
             @Override
             public void onFailure(Call<List<MeterObject>> call, Throwable t) {
-                Log.d(TAG, "onFailure: FAILURE  " + t.getMessage());
+                mMeterResponseListener.fail("Error getting data: "+t.getMessage()); // call fail from listener
             }
         });
     }

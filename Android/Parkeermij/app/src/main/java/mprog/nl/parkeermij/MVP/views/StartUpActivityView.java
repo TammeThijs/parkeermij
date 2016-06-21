@@ -1,7 +1,10 @@
 package mprog.nl.parkeermij.MVP.views;
 
+import android.support.annotation.Nullable;
+
 import java.util.List;
 
+import mprog.nl.parkeermij.models.MeterObject;
 import mprog.nl.parkeermij.models.RouteObject;
 
 /**
@@ -11,7 +14,8 @@ public interface StartUpActivityView {
     void toggleRipple();
     void startRoutes();
     void gpsCheck();
-    void startRoutesActivity(List<RouteObject> routeObjects);
+    void startRoutesActivity(@Nullable List<RouteObject> routeObjects,
+                             @Nullable List<MeterObject> meterObjects);
     void toggleSnackbar(String message);
     boolean isNetworkAvailable();
 }

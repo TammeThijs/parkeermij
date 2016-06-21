@@ -15,4 +15,5 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="menu_meters">Meters</string>
     <string name="menu_garages">Garages</string>
+    <string name="string_no_internet">Er kon geen verbinding worden gemaakt met het internet</string>
 </resources>

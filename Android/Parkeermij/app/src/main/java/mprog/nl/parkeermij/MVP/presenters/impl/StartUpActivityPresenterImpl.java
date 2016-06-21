@@ -1,7 +1,5 @@
 package mprog.nl.parkeermij.MVP.presenters.impl;
 
-import android.util.Log;
-
 import java.util.List;
 
 import javax.inject.Inject;
@@ -51,24 +49,24 @@ public class StartUpActivityPresenterImpl implements StartUpActivityPresenter {
     private ResponseListener<List<RouteObject>> mRouteResponseListener = new ResponseListener<List<RouteObject>>() {
         @Override
         public void success(List<RouteObject> routeObjects) {
-            mView.startRoutesActivity(routeObjects);
+            mView.startRoutesActivity(routeObjects, null);
         }
 
         @Override
         public void fail(String error) {
-            mView.toggleSnackbar("Fout bij ophalen routes");
+            mView.toggleSnackbar("Fout bij ophalen data");
         }
     };
 
     private ResponseListener<List<MeterObject>> mMeterResponseListener = new ResponseListener<List<MeterObject>>() {
         @Override
         public void success(List<MeterObject> response) {
-            Log.d(TAG, "success: meter presenter");
+            mView.startRoutesActivity(null, response);
         }
 
         @Override
         public void fail(String error) {
-            Log.d(TAG, "fail: meter presenter");
+            mView.toggleSnackbar("Fout bij ophalen data");
         }
     };
 }

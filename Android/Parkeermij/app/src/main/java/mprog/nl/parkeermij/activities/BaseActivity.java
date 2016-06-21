@@ -30,6 +30,7 @@ import mprog.nl.parkeermij.dagger.modules.RoutesActivityModule;
 import mprog.nl.parkeermij.fragments.MapsFragment;
 import mprog.nl.parkeermij.fragments.RoutesListFragment;
 import mprog.nl.parkeermij.models.LocationObject;
+import mprog.nl.parkeermij.models.MeterObject;
 import mprog.nl.parkeermij.models.RouteObject;
 
 public class BaseActivity extends AppCompatActivity implements BaseActivityView,
@@ -38,6 +39,7 @@ public class BaseActivity extends AppCompatActivity implements BaseActivityView,
     public static final String TAG = "BaseActivity";
     public static final String LOCATION = "location";
     public static final String ROUTES = "routes";
+    public static final String METERS = "meters";
 
     private List<RouteObject> mRouteObjects;
     private LocationObject mLocationObject;
@@ -54,7 +56,8 @@ public class BaseActivity extends AppCompatActivity implements BaseActivityView,
     @Inject
     BaseActivityPresenter mPresenter;
 
-    public static Intent newIntent(Context context, Location location, List<RouteObject> routeObjects) {
+    public static Intent newIntent(Context context, Location location, List<RouteObject> routeObjects,
+                                   List<MeterObject> meterObjects) {
         Intent intent = new Intent(context, BaseActivity.class);
         Bundle extras = new Bundle();
 
@@ -63,6 +66,7 @@ public class BaseActivity extends AppCompatActivity implements BaseActivityView,
 
         extras.putSerializable(LOCATION, mLocation);
         extras.putSerializable(ROUTES, (Serializable) routeObjects);
+        extras.putSerializable(METERS, (Serializable) meterObjects);
         intent.putExtras(extras);
 
         return intent;
