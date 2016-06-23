@@ -5,43 +5,34 @@
 ###Probleem
 Parkeren in Amsterdam.
 
-###oplossing
-Door middel van een android applicatie mensen die in Amsterdam willen parkeren helpen om een plek te vinden.
-
- - Location based; gebruiker kan dmv GPS zijn huidige locatie gebruiken als startpunt, of een locatie kiezen vanuit google maps.
- - Call naar api met positie + tijd, JSON met routes terug.
- - Deze sorteren op tijd en/of kosten en laten zien aan de gebruiker.
- - Gebruiker kan een route selecteren waarna deze getoond wordt in  googlemaps.
+###oplossing(aangepast)
+Het doel van de Parkeermij app is dat de gebruiker, op basis van GPS locatie, opties krijgt om te parkeren in Amsterdam. Zo kunnen alle parkeergebieden inclusief locaties van parkeermeters getoond worden waarna de gebruiker kan kiezen om een route naar een van deze meters te starten. Door het overzicht van de verschillende gebieden in Amsterdam, en een leganda die de prijs per gebied aangeeft, geeft dit de gebruiker een goed overzicht over de mogelijkheden qua parkeren en prijs..
 
 ###data
-- API routes: http://divvapi.parkshark.nl/, ontwikkeld in samenwerking met gemeente amsterdam
-Amsterdam. (http://data.amsterdam.nl/dataset/parkeer_api/resource/82e9b535-10f8-4d6b-bac0-c2b1aea398b9)
-- API google maps.
-- API locatie.
-- (optioneel) API auto complete adressen
+#####API
+- http://divvapi.parkshark.nl/
+- https://opendata.rdw.nl/resource/e6d2-rh45.json
 
-###onderdelen/opzet
-#####landing page
-Hier kan de gebruiker selecteren om huidige locatie te gebruiken of zelf een locatie in te voeren. Beide opties
-resulteren in feedback door een locatie op googlemaps te laten zien.
+#####Open data
+- https://opendata.rdw.nl/Parkeren/Open-Data-Parkeren-KAART-PARKEERGEBIEDEN/7sqe-3mca
+- https://opendata.rdw.nl/Parkeren/Open-Data-Parkeren-GEOMETRIE-GEBIED/nsk3-v9n7
+- https://www.amsterdam.nl/parkeren-verkeer/parkeertarieven/
 
-#####maps
-Locatie laten zien op google maps. (waarschijnlijk weg)
-
-#####routes
-routes laten zien met ~5-10 resultaten, deze kunnen gefilterd worden op kosten of afstand.
-- Als route wordt geselecteerd wordt deze getoond in maps.
-
-
-#####optioneel
-- lijst met gebruikte locaties opslaan
-- realtime bezettingsgraad parkeergarage
-- locaties parkeermeters bij locatie
+<img src="https://github.com/TammeThijs/parkeermij/blob/master/doc/startUpActivity.PNG" align="left" height="326" width="183" >
+<img src="https://github.com/TammeThijs/parkeermij/blob/master/doc/MapsFragment1.PNG" align="left" height="326" width="183" >
+<img src="https://github.com/TammeThijs/parkeermij/blob/master/doc/MapsFragment.PNG" align="left" height="326" width="183" >
+#
+<img src="https://github.com/TammeThijs/parkeermij/blob/master/doc/MapsFragment2.PNG" align="left" height="326" width="183" >
+<img src="https://github.com/TammeThijs/parkeermij/blob/master/doc/RouteFragment.PNG" align="left" height="326" width="183" >
+<img src="https://github.com/TammeThijs/parkeermij/blob/master/doc/MapsRouteDisplay.PNG" align="left" height="326" width="183" >
 
 
-###vergelijkbare apps
-http://www.parkshark.nl/
-Gebruikt dezelfde API, echter wel alleen iOS en verouderd.
+
+
+
+#####owner
+Apache Licence
+2016© Tamme Thijs
 
 
 
