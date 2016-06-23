@@ -1,5 +1,5 @@
 #Parkeermij App
-<img src="https://github.com/stephankok/progproject/blob/master/doc/final%20images/main.png" align="right" height="326" width="183" >
+<img src="https://github.com/TammeThijs/parkeermij/blob/master/doc/MapsFragment2.PNG" align="right" height="326" width="183" >
 Het doel van de Parkeermij app is dat de gebruiker, op basis van GPS locatie, opties krijgt om te parkeren in Amsterdam. Zo kunnen alle
 parkeergebieden inclusief locaties van parkeermeters getoond worden waarna de gebruiker kan kiezen om een route naar een van deze meters
 te starten. Door het overzicht van de verschillende gebieden in Amsterdam, en een leganda die de prijs per gebied aangeeft, geeft dit de 
