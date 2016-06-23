@@ -18,13 +18,12 @@ Het doel van de Parkeermij app is dat de gebruiker, op basis van GPS locatie, op
 - https://opendata.rdw.nl/Parkeren/Open-Data-Parkeren-GEOMETRIE-GEBIED/nsk3-v9n7
 - https://www.amsterdam.nl/parkeren-verkeer/parkeertarieven/
 
-<img src="https://github.com/TammeThijs/parkeermij/blob/master/doc/startUpActivity.PNG" align="left" height="326" width="183" >
-<img src="https://github.com/TammeThijs/parkeermij/blob/master/doc/MapsFragment1.PNG" align="left" height="326" width="183" >
-<img src="https://github.com/TammeThijs/parkeermij/blob/master/doc/MapsFragment.PNG" align="left" height="326" width="183" >
-#
-<img src="https://github.com/TammeThijs/parkeermij/blob/master/doc/MapsFragment2.PNG" align="left" height="326" width="183" >
-<img src="https://github.com/TammeThijs/parkeermij/blob/master/doc/RouteFragment.PNG" align="left" height="326" width="183" >
-<img src="https://github.com/TammeThijs/parkeermij/blob/master/doc/MapsRouteDisplay.PNG" align="left" height="326" width="183" >
+<img src="https://github.com/TammeThijs/parkeermij/blob/master/doc/startUpActivity.PNG" align="left" height="360" width="200" >
+<img src="https://github.com/TammeThijs/parkeermij/blob/master/doc/MapsFragment1.PNG" align="left" height="360" width="200" >
+<img src="https://github.com/TammeThijs/parkeermij/blob/master/doc/MapsFragment.PNG" align="left" height="360" width="200" >
+<img src="https://github.com/TammeThijs/parkeermij/blob/master/doc/MapsFragment2.PNG" align="left" height="360" width="200" >
+<img src="https://github.com/TammeThijs/parkeermij/blob/master/doc/RouteFragment.PNG" align="left" height="360" width="200" >
+<img src="https://github.com/TammeThijs/parkeermij/blob/master/doc/MapsRouteDisplay.PNG" align="left" height="360" width="200" >
 
 
 
