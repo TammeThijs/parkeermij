@@ -29,7 +29,6 @@ Het doel van de Parkeermij app is dat de gebruiker, op basis van GPS locatie, op
 
 
 
-#####owner
 Apache Licence
 2016© Tamme Thijs
 
