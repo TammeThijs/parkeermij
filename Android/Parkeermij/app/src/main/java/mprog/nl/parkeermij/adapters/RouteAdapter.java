@@ -176,6 +176,4 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.MainViewHold
             return dist1.compareTo(dist2);
         }
     }
-
-
 }

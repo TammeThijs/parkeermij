@@ -21,37 +21,37 @@
         <item
             android:enabled="false"
             android:icon="@drawable/rectangle_zone1"
-            android:title="€ 5,0"
+            android:title="€ 5,0 p.u."
             />
         <item
             android:enabled="false"
             android:icon="@drawable/rectangle_zone2"
-            android:title="€ 4,0"
+            android:title="€ 4,0 p.u."
             />
         <item
             android:enabled="false"
             android:icon="@drawable/rectangle_zone3"
-            android:title="€ 3,0"
+            android:title="€ 3,0 p.u."
             />
         <item
             android:enabled="false"
             android:icon="@drawable/rectangle_zone4"
-            android:title="€ 2,4"
+            android:title="€ 2,4 p.u."
             />
         <item
             android:enabled="false"
             android:icon="@drawable/rectangle_zone5"
-            android:title="€ 1,4"
+            android:title="€ 1,4 p.u."
             />
         <item
             android:enabled="false"
             android:icon="@drawable/rectangle_zone6"
-            android:title="€ 0,1 / € 2.4"
+            android:title="€ 0,1 / € 2.4 p.u."
             />
         <item
             android:enabled="false"
             android:icon="@drawable/rectangle_zone7"
-            android:title="€ 1,3"
+            android:title="€ 1,3 p.u."
             />
     </group>
 </menu>

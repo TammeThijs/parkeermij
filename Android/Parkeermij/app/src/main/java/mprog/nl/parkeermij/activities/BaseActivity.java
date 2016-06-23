@@ -177,7 +177,12 @@ public class BaseActivity extends AppCompatActivity implements BaseActivityView,
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            if (getCurrentFragment() instanceof RoutesListFragment) {
+                showMap();
+            } else {
+                super.onBackPressed();
+            }
+
         }
     }
 
