@@ -137,17 +137,15 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
         mClusterManager.clearItems();
 
         // load settings
-        SharedPreferences settings = getActivity().getSharedPreferences("settings", 0);
-        boolean isCheckedMeter = settings.getBoolean("meterbox", false);
-        boolean isCheckedGarage = settings.getBoolean("garagebox", false);
+        SharedPreferences settings = getActivity().getSharedPreferences(getActivity()
+                .getString(R.string.shared_settings), 0);
+        boolean isCheckedMeter = settings.getBoolean(getActivity().getString(R.string.show_meters), false);
+        boolean isCheckedGarage = settings.getBoolean(getActivity().getString(R.string.show_garages), false);
 
-
-        for (RouteObject route : mParkLocations) {
-
-            if (isCheckedGarage) {
+        if (isCheckedGarage) {
+            for (RouteObject route : mParkLocations) {
                 Double lat = Double.parseDouble(route.getLatitude());
                 Double lon = Double.parseDouble(route.getLongitude());
-
 
                 mClusterManager.addItem(new ClusterObject(lat, lon));
             }

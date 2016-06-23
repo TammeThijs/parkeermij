@@ -39,8 +39,8 @@ import butterknife.ButterKnife;
 import mprog.nl.parkeermij.MVP.presenters.StartUpActivityPresenter;
 import mprog.nl.parkeermij.MVP.views.StartUpActivityView;
 import mprog.nl.parkeermij.R;
-import mprog.nl.parkeermij.dagger.components.DaggerMainActivityComponent;
-import mprog.nl.parkeermij.dagger.modules.MainActivityModule;
+import mprog.nl.parkeermij.dagger.components.DaggerStartUpActivityComponent;
+import mprog.nl.parkeermij.dagger.modules.StartUpActivityModule;
 import mprog.nl.parkeermij.models.LocationObject;
 import mprog.nl.parkeermij.models.RouteObject;
 
@@ -84,8 +84,8 @@ public class StartUpActivity extends AppCompatActivity implements StartUpActivit
     }
 
     private void initDependencies() {
-        DaggerMainActivityComponent.builder()
-                .mainActivityModule(new MainActivityModule(this))
+        DaggerStartUpActivityComponent.builder()
+                .startUpActivityModule(new StartUpActivityModule(this))
                 .build()
                 .inject(this);
     }

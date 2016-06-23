@@ -6,9 +6,9 @@ package mprog.nl.parkeermij.dagger.components;
 
 import dagger.Component;
 import mprog.nl.parkeermij.activities.StartUpActivity;
-import mprog.nl.parkeermij.dagger.modules.MainActivityModule;
+import mprog.nl.parkeermij.dagger.modules.StartUpActivityModule;
 
-@Component(modules = MainActivityModule.class)
-public interface MainActivityComponent {
+@Component(modules = StartUpActivityModule.class)
+public interface StartUpActivityComponent {
     void inject(StartUpActivity activity);
 }

@@ -131,7 +131,9 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.MainViewHold
         return mRoutes.size();
     }
 
-
+    /**
+     * Custom ViewHolder used in recyclerview
+     */
     public class MainViewHolder extends RecyclerView.ViewHolder{
 
         @BindView(R.id.map_view)
@@ -155,6 +157,9 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.MainViewHold
         }
     }
 
+    /**
+     * Comperator for price.
+     */
     public class CostComperator implements Comparator<RouteObject> {
 
         @Override
@@ -166,6 +171,9 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.MainViewHold
         }
     }
 
+    /**
+     * Comperator for distance.
+     */
     public class DistComperator implements Comparator<RouteObject> {
 
         @Override

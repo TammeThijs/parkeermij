@@ -6,9 +6,9 @@ package mprog.nl.parkeermij.dagger.components;
 
 import dagger.Component;
 import mprog.nl.parkeermij.activities.BaseActivity;
-import mprog.nl.parkeermij.dagger.modules.RoutesActivityModule;
+import mprog.nl.parkeermij.dagger.modules.BaseActivityModule;
 
-@Component(modules = RoutesActivityModule.class)
-public interface RoutesActivityComponent {
+@Component(modules = BaseActivityModule.class)
+public interface BaseActivityComponent {
     void inject(BaseActivity activity);
 }

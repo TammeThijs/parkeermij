@@ -12,11 +12,11 @@ import mprog.nl.parkeermij.MVP.views.BaseActivityView;
  * Created by Tamme on 31-5-2016.
  */
 @Module
-public class RoutesActivityModule {
+public class BaseActivityModule {
 
     private BaseActivityView mView;
 
-    public RoutesActivityModule(BaseActivityView view) {
+    public BaseActivityModule(BaseActivityView view) {
         mView = view;
     }
 

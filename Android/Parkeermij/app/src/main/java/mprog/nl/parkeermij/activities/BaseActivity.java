@@ -32,13 +32,19 @@ import butterknife.ButterKnife;
 import mprog.nl.parkeermij.MVP.presenters.BaseActivityPresenter;
 import mprog.nl.parkeermij.MVP.views.BaseActivityView;
 import mprog.nl.parkeermij.R;
-import mprog.nl.parkeermij.dagger.components.DaggerRoutesActivityComponent;
-import mprog.nl.parkeermij.dagger.modules.RoutesActivityModule;
+import mprog.nl.parkeermij.dagger.components.DaggerBaseActivityComponent;
+import mprog.nl.parkeermij.dagger.modules.BaseActivityModule;
 import mprog.nl.parkeermij.fragments.MapsFragment;
 import mprog.nl.parkeermij.fragments.RoutesListFragment;
 import mprog.nl.parkeermij.models.LocationObject;
 import mprog.nl.parkeermij.models.MeterObject;
 import mprog.nl.parkeermij.models.RouteObject;
+
+/**
+ * Tamme Thijs
+ * Base Activity
+ *
+ */
 
 public class BaseActivity extends AppCompatActivity implements BaseActivityView,
         NavigationView.OnNavigationItemSelectedListener {
@@ -65,10 +71,7 @@ public class BaseActivity extends AppCompatActivity implements BaseActivityView,
 
     @Inject
     BaseActivityPresenter mPresenter;
-    /**
-     * ATTENTION: This was auto-generated to implement the App Indexing API.
-     * See https://g.co/AppIndexing/AndroidStudio for more information.
-     */
+
     private GoogleApiClient mClient;
 
     public static Intent newIntent(Context context, Location location, List<RouteObject> routeObjects) {
@@ -99,8 +102,8 @@ public class BaseActivity extends AppCompatActivity implements BaseActivityView,
     }
 
     private void initDependencies() {
-        DaggerRoutesActivityComponent.builder()
-                .routesActivityModule(new RoutesActivityModule(this))
+        DaggerBaseActivityComponent.builder()
+                .baseActivityModule(new BaseActivityModule(this))
                 .build()
                 .inject(this);
     }
@@ -179,8 +182,7 @@ public class BaseActivity extends AppCompatActivity implements BaseActivityView,
 
     /**
      * return active fragment in baseactivity
-     *
-     * @return
+     * * @return
      */
     private Fragment getCurrentFragment() {
         return getSupportFragmentManager().findFragmentById(R.id.content);
@@ -207,6 +209,7 @@ public class BaseActivity extends AppCompatActivity implements BaseActivityView,
 
     /**
      * Handle logic in presenter layer
+     *
      * @param item
      * @return
      */
@@ -243,6 +246,7 @@ public class BaseActivity extends AppCompatActivity implements BaseActivityView,
 
     /**
      * Init toolbar options menu.
+     *
      * @param menu
      * @return
      */

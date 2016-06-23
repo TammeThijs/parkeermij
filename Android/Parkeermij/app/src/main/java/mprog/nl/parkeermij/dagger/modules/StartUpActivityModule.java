@@ -12,11 +12,11 @@ import mprog.nl.parkeermij.MVP.views.StartUpActivityView;
  * Created by Tamme on 31-5-2016.
  */
 @Module
-public class MainActivityModule {
+public class StartUpActivityModule {
 
     private StartUpActivityView mView;
 
-    public MainActivityModule(StartUpActivityView view) {
+    public StartUpActivityModule(StartUpActivityView view) {
         mView = view;
     }
 
