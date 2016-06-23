@@ -95,10 +95,10 @@
 - menu's verschillen nu a.d.h.v welk fragment getoond word
 - legenda gemaakt in navigation drawer
 - hiervoor shapes in xml getekend
+- report
 
-// Cluster icon workaround
-https://code.google.com/p/gmaps-api-issues/issues/detail?
-http://stackoverflow.com/questions/37211274/google-map-marker-is-replaced-by-bounding-rectangle-on-zoom/37431561#37431561
+#####day20
+- Eindpresentatie
 
 
 
