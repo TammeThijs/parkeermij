@@ -164,7 +164,7 @@ public class StartUpActivity extends AppCompatActivity implements StartUpActivit
     }
 
     @Override
-    public void startRoutesActivity(@Nullable List<RouteObject> routeObjects) {
+    public void startBaseActivity(@Nullable List<RouteObject> routeObjects) {
 
         if (routeObjects != null) {
             Intent intent = BaseActivity.newIntent(this, mLocation, routeObjects);
@@ -314,13 +314,13 @@ public class StartUpActivity extends AppCompatActivity implements StartUpActivit
     @Override
     public void onLocationChanged(Location location) {
         // permissioncheck
-//        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-//                != PackageManager.PERMISSION_GRANTED &&
-//                ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
-//                        != PackageManager.PERMISSION_GRANTED) {
-//            toggleSnackbar(getString(R.string.permission_request));
-//            return;
-//        }
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
+                        != PackageManager.PERMISSION_GRANTED) {
+            toggleSnackbar(getString(R.string.permission_request));
+            return;
+        }
         // update locationObject
         Log.d(TAG, "onLocationChanged: called");
         mLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);

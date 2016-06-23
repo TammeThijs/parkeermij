@@ -13,7 +13,7 @@ public interface StartUpActivityView {
     void toggleRipple();
     void startRoutes();
     void gpsCheck();
-    void startRoutesActivity(@Nullable List<RouteObject> routeObjects);
+    void startBaseActivity(@Nullable List<RouteObject> routeObjects);
     void toggleSnackbar(String message);
     boolean isNetworkAvailable();
 }

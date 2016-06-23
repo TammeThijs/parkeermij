@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
@@ -14,7 +15,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.io.Serializable;
@@ -61,6 +65,11 @@ public class BaseActivity extends AppCompatActivity implements BaseActivityView,
 
     @Inject
     BaseActivityPresenter mPresenter;
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    private GoogleApiClient mClient;
 
     public static Intent newIntent(Context context, Location location, List<RouteObject> routeObjects) {
         Intent intent = new Intent(context, BaseActivity.class);
@@ -84,6 +93,9 @@ public class BaseActivity extends AppCompatActivity implements BaseActivityView,
 
         initDependencies();
         init();
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        mClient = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
     private void initDependencies() {
@@ -147,16 +159,22 @@ public class BaseActivity extends AppCompatActivity implements BaseActivityView,
      * @param meters
      */
     @Override
-    public void setMeterdata(List<MeterObject> meters) {
-        List<LatLng> temp = new ArrayList<>();
+    public void setMeterdata(@Nullable List<MeterObject> meters, boolean succes) {
 
-        for (MeterObject meter : meters) {
-            String[] coordinates = meter.getCoordinates().getCoordinates();
-            temp.add(new LatLng(Double.parseDouble(coordinates[1]),
-                    Double.parseDouble(coordinates[0])));
+        if (succes) {
+            List<LatLng> temp = new ArrayList<>();
+
+            for (MeterObject meter : meters) {
+                String[] coordinates = meter.getCoordinates().getCoordinates();
+                temp.add(new LatLng(Double.parseDouble(coordinates[1]),
+                        Double.parseDouble(coordinates[0])));
+            }
+            mMeterObjects = temp;
+        } else {
+            Toast.makeText(BaseActivity.this, getString(R.string.rdw_api_fail), Toast.LENGTH_SHORT)
+                    .show();
         }
-        mMeterObjects = temp;
-        showMap(); // load map if all data is gathered
+        showMap(); // load map
     }
 
     /**
@@ -179,6 +197,7 @@ public class BaseActivity extends AppCompatActivity implements BaseActivityView,
         } else {
             if (getCurrentFragment() instanceof RoutesListFragment) {
                 showMap();
+                mNavigationView.getMenu().getItem(0).setChecked(true);
             } else {
                 super.onBackPressed();
             }
@@ -187,72 +206,46 @@ public class BaseActivity extends AppCompatActivity implements BaseActivityView,
     }
 
     /**
-     * Toolbar menu ItemSelected. Settings are stored in sharedprefs.     *
-     *
+     * Handle logic in presenter layer
      * @param item
      * @return
      */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         item.setChecked(!item.isChecked());
-        SharedPreferences settings = getSharedPreferences(getString(R.string.shared_settings), 0);
-        SharedPreferences.Editor editor = settings.edit();
+        mPresenter.onOptionsItemSelected(item.getItemId(), this, item.isChecked());
 
-        switch (item.getItemId()) {
-            case R.id.garages:
-                editor.putBoolean(getString(R.string.show_garages), item.isChecked());
-                break;
-            case R.id.meters:
-                editor.putBoolean(getString(R.string.show_meters), item.isChecked());
-                break;
-            case R.id.afstand:
-                editor.putBoolean(getString(R.string.sort_distance), true);
-                break;
-            case R.id.prijs:
-                editor.putBoolean(getString(R.string.sort_distance), false);
-            default:
-                break;
-        }
-        editor.apply();
+        return super.onOptionsItemSelected(item);
+    }
 
+    /**
+     * If menu settings are changed refresh current fragment data
+     */
+    @Override
+    public void applyMenuChange() {
         Fragment currentFragment = getCurrentFragment();
         if (currentFragment instanceof MapsFragment) {
             ((MapsFragment) currentFragment).setMarkers();
         }
         if (currentFragment instanceof RoutesListFragment) {
             ((RoutesListFragment) currentFragment).filterList();
-
         }
-        return super.onOptionsItemSelected(item);
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
 
-        // NavigationView Onclick.
-        switch (item.getItemId()) {
-            case R.id.maps:
-                // only show map if current fragment isnt map
-                if (getCurrentFragment() instanceof RoutesListFragment) {
-                    showMap();
-                }
-                break;
-            case R.id.routes:
-                // only show routes if current fragment isnt routes
-                if (getCurrentFragment() instanceof MapsFragment) {
-                    showRoutes();
-                }
-                break;
-            default:
-                break;
-        }
-
-        // close drawer
+        mPresenter.onNavigationItemSelected(item.getItemId(), getCurrentFragment());
         mDrawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
 
+    /**
+     * Init toolbar options menu.
+     * @param menu
+     * @return
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.toolbar_menu, menu);
@@ -276,13 +269,14 @@ public class BaseActivity extends AppCompatActivity implements BaseActivityView,
             mItemPrijs.setChecked(true);
         }
 
-
         return true;
     }
 
+    @Override
     public void showOverflowMenu(boolean showMenu) {
-        if (mToolbar.getMenu() != null)
+        if (mToolbar.getMenu() != null) {
             mToolbar.getMenu().setGroupVisible(R.id.mapsmenu, showMenu);
-        mToolbar.getMenu().setGroupVisible(R.id.routesmenu, !showMenu);
+            mToolbar.getMenu().setGroupVisible(R.id.routesmenu, !showMenu);
+        }
     }
 }

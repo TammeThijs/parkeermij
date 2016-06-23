@@ -47,7 +47,7 @@ public class StartUpActivityPresenterImpl implements StartUpActivityPresenter {
     private ResponseListener<List<RouteObject>> mRouteResponseListener = new ResponseListener<List<RouteObject>>() {
         @Override
         public void success(List<RouteObject> routeObjects) {
-            mView.startRoutesActivity(routeObjects);
+            mView.startBaseActivity(routeObjects);
         }
 
         @Override

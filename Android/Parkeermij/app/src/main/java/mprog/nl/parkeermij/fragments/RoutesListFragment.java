@@ -92,7 +92,6 @@ public class RoutesListFragment extends Fragment implements RouteAdapter.OnClick
 
     @Override
     public void onClick(RouteObject routeObject) {
-        Log.d("clicked", "onClick: CLICKED" + routeObject.getCost());
         startRouteMaps(routeObject);
     }
 

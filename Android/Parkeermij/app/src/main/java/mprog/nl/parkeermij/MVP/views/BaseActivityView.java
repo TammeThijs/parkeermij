@@ -13,5 +13,7 @@ public interface BaseActivityView {
     void setData(List<RouteObject> routeList, LocationObject locationObject);
     void showMap();
     void showRoutes();
-    void setMeterdata(List<MeterObject> meters);
+    void setMeterdata(List<MeterObject> meters, boolean succes);
+    void showOverflowMenu(boolean showMenu);
+    void applyMenuChange();
 }

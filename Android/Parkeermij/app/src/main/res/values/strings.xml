@@ -23,4 +23,5 @@
     <string name="show_garages">garagebox</string>
     <string name="show_meters">meterbox</string>
     <string name="sort_distance">sortDistance</string>
+    <string name="rdw_api_fail">Unable to retrieve meter data from RDW</string>
 </resources>

@@ -128,7 +128,6 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
         mMap.getUiSettings().setTiltGesturesEnabled(false);
 
         mMap.setOnCameraChangeListener(mClusterManager);
-//        mMap.setOnMarkerClickListener(mClusterManager);
 
         setMarkers();
     }
@@ -167,6 +166,8 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
 
         }
         mClusterManager.cluster();
+
+        // Set areas if needed
         if (!isAreaSet) {
             setAreas();
         }

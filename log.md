@@ -82,9 +82,23 @@
 - Aantal performance changes gemaakt
 - Oplossing gevonden voor behouden van map fragment wanneer een ander fragment wordt opgevraagd (deze wordt er nu overheen gelegd ipv replaced)
 - Een nieuwe API gebruikt om parkeerpalen op te halen, helaas bevat deze alleen coordinaten en geen informatie qua prijs/tijden etc
-- Nieuwe API
+- Models voor deze nieuwe meters aangemaakt 
 
-https://code.google.com/p/gmaps-api-issues/issues/detail?id=9765
+#####day18
+- Erg veel problemen performance google maps
+- Google maps util uitgezocht en geïmplementeerd
+- Marker clustering toegevoegd
+
+######day19
+- bijschaven functies app
+- sorteer functie bij routes geïmplementeerd
+- menu's verschillen nu a.d.h.v welk fragment getoond word
+- legenda gemaakt in navigation drawer
+- hiervoor shapes in xml getekend
+
+// Cluster icon workaround
+https://code.google.com/p/gmaps-api-issues/issues/detail?
+http://stackoverflow.com/questions/37211274/google-map-marker-is-replaced-by-bounding-rectangle-on-zoom/37431561#37431561
 
 
 
