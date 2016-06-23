@@ -103,6 +103,7 @@ public class BaseActivity extends AppCompatActivity implements BaseActivityView,
         toggle.syncState();
 
         mNavigationView.setNavigationItemSelectedListener(this);
+        mNavigationView.setItemIconTintList(null); // custom colors required cause of legend
         mNavigationView.getMenu().getItem(0).setChecked(true);
         mPresenter.init(getIntent());
     }
@@ -262,14 +263,13 @@ public class BaseActivity extends AppCompatActivity implements BaseActivityView,
         MenuItem mItemGarages = menu.findItem(R.id.garages);
         mItemGarages.setChecked(isCheckedGarage);
 
-        if(isDistanceSort){
+        if (isDistanceSort) {
             MenuItem mItemDistance = menu.findItem(R.id.afstand);
             mItemDistance.setChecked(true);
         } else {
             MenuItem mItemPrijs = menu.findItem(R.id.prijs);
             mItemPrijs.setChecked(true);
         }
-
 
 
         return true;

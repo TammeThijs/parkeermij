@@ -3,13 +3,55 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/maps"
-            android:icon="@drawable/ic_map_white_24dp"
+            android:icon="@drawable/ic_map_black_24dp"
             android:title="Map"/>
         <item
             android:id="@+id/routes"
             android:icon="@drawable/ic_menu_gallery"
             android:title="Routes"/>
     </group>
+    <item
+        android:enabled="false"
+        android:title=" "/>
+    <item
+        android:enabled="false"
+        android:title="Legenda"/>
 
-    
+    <group>
+        <item
+            android:enabled="false"
+            android:icon="@drawable/rectangle_zone1"
+            android:title="€ 5,0"
+            />
+        <item
+            android:enabled="false"
+            android:icon="@drawable/rectangle_zone2"
+            android:title="€ 4,0"
+            />
+        <item
+            android:enabled="false"
+            android:icon="@drawable/rectangle_zone3"
+            android:title="€ 3,0"
+            />
+        <item
+            android:enabled="false"
+            android:icon="@drawable/rectangle_zone4"
+            android:title="€ 2,4"
+            />
+        <item
+            android:enabled="false"
+            android:icon="@drawable/rectangle_zone5"
+            android:title="€ 1,4"
+            />
+        <item
+            android:enabled="false"
+            android:icon="@drawable/rectangle_zone6"
+            android:title="€ 0,1 / € 2.4"
+            />
+        <item
+            android:enabled="false"
+            android:icon="@drawable/rectangle_zone7"
+            android:title="€ 1,3"
+            />
+    </group>
 </menu>

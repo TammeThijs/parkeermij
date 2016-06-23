@@ -168,6 +168,8 @@ public class StartUpActivity extends AppCompatActivity implements StartUpActivit
 
         if (routeObjects != null) {
             Intent intent = BaseActivity.newIntent(this, mLocation, routeObjects);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
         }
     }
