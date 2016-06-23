@@ -118,6 +118,16 @@ Google Map Utils(https://github.com/googlemaps/android-maps-utils)
 Picasso(http://square.github.io/picasso/)
 - Erg sterke library voor het ophalen (en cachen) van images
 
+#####API
+- http://divvapi.parkshark.nl/
+- https://opendata.rdw.nl/resource/e6d2-rh45.json
+
+#####Data
+- https://opendata.rdw.nl/Parkeren/Open-Data-Parkeren-KAART-PARKEERGEBIEDEN/7sqe-3mca
+- https://opendata.rdw.nl/Parkeren/Open-Data-Parkeren-GEOMETRIE-GEBIED/nsk3-v9n7
+- https://www.amsterdam.nl/parkeren-verkeer/parkeertarieven/
+
+#####Honorable mention
 www.stackoverflow.com
 
 
