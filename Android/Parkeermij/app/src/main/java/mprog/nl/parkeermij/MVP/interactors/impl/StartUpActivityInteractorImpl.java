@@ -5,7 +5,6 @@ import java.util.List;
 import mprog.nl.parkeermij.MVP.interactors.StartUpActivityInteractor;
 import mprog.nl.parkeermij.MVP.interfaces.ResponseListener;
 import mprog.nl.parkeermij.models.LocationObject;
-import mprog.nl.parkeermij.models.MeterObject;
 import mprog.nl.parkeermij.models.RouteList;
 import mprog.nl.parkeermij.models.RouteObject;
 import mprog.nl.parkeermij.network.ApiManager;
@@ -19,9 +18,7 @@ import retrofit2.Response;
 public class StartUpActivityInteractorImpl implements StartUpActivityInteractor {
 
     private ResponseListener<List<RouteObject>> mRouteResponseListener;
-    private ResponseListener<List<MeterObject>> mMeterResponseListener;
     private RouteList mList;
-    public static final String TAG = "Netwerk";
 
     @Override
     public void getRoutes(ResponseListener<List<RouteObject>> listener, LocationObject
@@ -46,31 +43,6 @@ public class StartUpActivityInteractorImpl implements StartUpActivityInteractor 
             @Override
             public void onFailure(Call<RouteList> call, Throwable t) {
                 mRouteResponseListener.fail("Error getting data: "+t.getMessage()); // call fail from listener
-            }
-        });
-    }
-
-    @Override
-    public void getParkMeters(ResponseListener<List<MeterObject>> listener, LocationObject locationObject) {
-        // set listener
-        mMeterResponseListener = listener;
-
-        // call asychronous
-        Call<List<MeterObject>> call = ApiManager.getMeterService().getMeters();
-        call.enqueue(new Callback<List<MeterObject>>() {
-            @Override
-            public void onResponse(Call<List<MeterObject>> call, Response<List<MeterObject>> response) {
-                if (response.isSuccessful()) {
-                    mMeterResponseListener.success(response.body()); // call succes from listener
-
-                } else {
-                    mMeterResponseListener.fail("Error getting data"); // call fail from listener
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<MeterObject>> call, Throwable t) {
-                mMeterResponseListener.fail("Error getting data: "+t.getMessage()); // call fail from listener
             }
         });
     }

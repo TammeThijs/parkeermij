@@ -2,7 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
       xmlns:app="http://schemas.android.com/apk/res-auto"
     >
-    <group>
+    <group android:id="@+id/mapsmenu">
         <item
             android:id="@+id/meters"
             android:checkable="true"
@@ -16,5 +16,20 @@
             android:title="@string/menu_garages"
             app:actionViewClass="android.widget.CheckBox"
             app:showAsAction="never"/>
+    </group>
+    <group
+        android:id="@+id/routesmenu"
+        android:visible="false"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/afstand"
+            android:checked="false"
+            android:title="@string/menu_routes_afstand"
+            />
+        <item
+            android:id="@+id/prijs"
+            android:checked="false"
+            android:title="@string/menu_routes_prijs"
+            />
     </group>
 </menu>

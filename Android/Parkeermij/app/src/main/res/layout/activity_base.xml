@@ -17,6 +17,16 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/toolbar"
-        />
+        >
+
+        <TextView
+            android:id="@+id/loader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Initializing map..."
+            />
+
+    </FrameLayout>
 
 </RelativeLayout>

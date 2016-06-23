@@ -16,4 +16,11 @@
     <string name="menu_meters">Meters</string>
     <string name="menu_garages">Garages</string>
     <string name="string_no_internet">Er kon geen verbinding worden gemaakt met het internet</string>
+    <string name="permission_request">Please set the correct permissions</string>
+    <string name="menu_routes_afstand">Afstand</string>
+    <string name="menu_routes_prijs">Prijs</string>
+    <string name="shared_settings">settings</string>
+    <string name="show_garages">garagebox</string>
+    <string name="show_meters">meterbox</string>
+    <string name="sort_distance">sortDistance</string>
 </resources>

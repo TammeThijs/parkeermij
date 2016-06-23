@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
@@ -20,6 +21,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -40,7 +42,6 @@ import mprog.nl.parkeermij.R;
 import mprog.nl.parkeermij.dagger.components.DaggerMainActivityComponent;
 import mprog.nl.parkeermij.dagger.modules.MainActivityModule;
 import mprog.nl.parkeermij.models.LocationObject;
-import mprog.nl.parkeermij.models.MeterObject;
 import mprog.nl.parkeermij.models.RouteObject;
 
 public class StartUpActivity extends AppCompatActivity implements StartUpActivityView,
@@ -57,8 +58,6 @@ public class StartUpActivity extends AppCompatActivity implements StartUpActivit
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest mLocationRequest;
     private Location mLocation;
-    private List<RouteObject> mRouteObjects = null;
-    private List<MeterObject> mMeterObjects = null;
 
     @BindView(R.id.location)
     FloatingActionButton mLocationButton;
@@ -72,16 +71,10 @@ public class StartUpActivity extends AppCompatActivity implements StartUpActivit
     @Inject
     StartUpActivityPresenter mPresenter;
 
-
-    public static Intent newIntent(Context context) {
-        Intent intent = new Intent(context, StartUpActivity.class);
-        return intent;
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_startup);
         ButterKnife.bind(this);
 
         init();
@@ -171,32 +164,30 @@ public class StartUpActivity extends AppCompatActivity implements StartUpActivit
     }
 
     @Override
-    public void startRoutesActivity(@Nullable List<RouteObject> routeObjects,
-                                    @Nullable List<MeterObject> meterObjects) {
+    public void startRoutesActivity(@Nullable List<RouteObject> routeObjects) {
 
-        if(routeObjects != null){
-            mRouteObjects = routeObjects;
-        }
-
-        if(meterObjects != null){
-            mMeterObjects = meterObjects;
-        }
-
-        if(mMeterObjects != null && mRouteObjects != null){
-            Intent intent = BaseActivity.newIntent(this, mLocation, mRouteObjects, mMeterObjects);
+        if (routeObjects != null) {
+            Intent intent = BaseActivity.newIntent(this, mLocation, routeObjects);
             startActivity(intent);
         }
-
     }
 
     /**
-     * Shows snackbar with custom message
+     * Shows snackbar with custom message     *
      * @param message
      */
     @Override
     public void toggleSnackbar(String message) {
         Snackbar snackbar = Snackbar.make(mCoordinatorLayout, message, Snackbar.LENGTH_LONG);
+        View v = snackbar.getView();
+
+        //workaround to use custom text color in snackbar
+        TextView tv = (TextView) v.findViewById(android.support.design.R.id.snackbar_text);
+        tv.setTextColor(Color.WHITE);
+
         snackbar.show();
+        toggleRipple(); // connection failed so dissable ripple
+
     }
 
     @Override
@@ -230,7 +221,7 @@ public class StartUpActivity extends AppCompatActivity implements StartUpActivit
 
     /**
      * Method that checks if device has network acces.
-     * Source: stackoverflow.
+     *
      * @return boolean
      */
     public boolean isNetworkAvailable() {
@@ -242,6 +233,7 @@ public class StartUpActivity extends AppCompatActivity implements StartUpActivit
 
     /**
      * Catches result from GPS activity
+     *
      * @param requestCode
      * @param resultCode
      * @param data
@@ -251,7 +243,7 @@ public class StartUpActivity extends AppCompatActivity implements StartUpActivit
         super.onActivityResult(requestCode, resultCode, data);
 
         // check result
-        if (requestCode == GPS_CHECK && resultCode == Activity.RESULT_OK ) {
+        if (requestCode == GPS_CHECK && resultCode == Activity.RESULT_OK) {
             gpsCheck();
         }
     }
@@ -259,6 +251,7 @@ public class StartUpActivity extends AppCompatActivity implements StartUpActivit
     /**
      * Is called after connection with GoogleApiClient, checks permissions and if the GPS
      * returned a valid location.
+     *
      * @param bundle
      */
     @Override
@@ -268,16 +261,21 @@ public class StartUpActivity extends AppCompatActivity implements StartUpActivit
                 != PackageManager.PERMISSION_GRANTED &&
                 ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
                         != PackageManager.PERMISSION_GRANTED) {
+            toggleSnackbar(getString(R.string.permission_request));
+            mLocationButton.setEnabled(false);
 
         } else {
+            Log.d(TAG, "onConnected: called");
             // try to populate location object
             mLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
             if (mLocation == null) {
                 // keep asking API for location when location is null
                 LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient,
                         mLocationRequest, this);
+                Log.d(TAG, "onConnected: v1 called");
             } else {
                 // start next activity
+                Log.d(TAG, "onConnected: v2 called");
                 startRoutes();
             }
         }
@@ -291,6 +289,7 @@ public class StartUpActivity extends AppCompatActivity implements StartUpActivit
     /**
      * Called after GoogleAPIClient failed
      * Source: http://stackoverflow.com/questions/17811720/googleplayservicesutil-error-dialog-button-does-nothing
+     *
      * @param connectionResult
      */
     @Override
@@ -313,21 +312,15 @@ public class StartUpActivity extends AppCompatActivity implements StartUpActivit
     @Override
     public void onLocationChanged(Location location) {
         // permissioncheck
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED &&
-                ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
-                        != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return;
-        }
-        Log.d(TAG, "onLocationChanged: CALLED");
+//        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+//                != PackageManager.PERMISSION_GRANTED &&
+//                ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
+//                        != PackageManager.PERMISSION_GRANTED) {
+//            toggleSnackbar(getString(R.string.permission_request));
+//            return;
+//        }
         // update locationObject
+        Log.d(TAG, "onLocationChanged: called");
         mLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
     }
 

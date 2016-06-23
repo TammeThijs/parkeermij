@@ -42,11 +42,9 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.MainViewHold
         URL_MAPS_STATIC = mContext.getString(R.string.maps_static_url);
     }
 
-    public void setItems(List<RouteObject> routes, OnClickListener listener,
-                         LocationObject locationObject) {
+    public void setItems(List<RouteObject> routes, OnClickListener listener) {
         mRoutesAll = routes;
         mOnClickListener = listener;
-        mLocationObject = locationObject;
         filterRoutes();
     }
 
@@ -54,27 +52,29 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.MainViewHold
         mRoutes = new ArrayList<>();
 
         // load settings
-        SharedPreferences settings = mContext.getSharedPreferences("settings", 0);
-        boolean isCheckedMeter = settings.getBoolean("meterbox", false);
-        boolean isCheckedGarage = settings.getBoolean("garagebox", false);
+        SharedPreferences settings = mContext.getSharedPreferences(mContext.getString(R.string.shared_settings), 0);
+        boolean isDistanceSort = settings.getBoolean(mContext.getString(R.string.sort_distance), false);
 
         // filter items
         for (RouteObject route: mRoutesAll) {
-            boolean isChecked = route.getType().equals("garage") ? isCheckedGarage : isCheckedMeter;
-            if(isChecked){
                 mRoutes.add(route);
-            }
         }
 
+        // select comperator based on settings
         CostComperator costComperator = new CostComperator();
         DistComperator distComperator = new DistComperator();
-        Collections.sort(mRoutes, distComperator);
+
+        if(isDistanceSort){
+            Collections.sort(mRoutes, distComperator);
+        } else {
+            Collections.sort(mRoutes, costComperator);
+        }
 
         notifyDataSetChanged();
     }
 
     public interface OnClickListener {
-        void onClick(LocationObject location, RouteObject routeObject , View view, String transition);
+        void onClick(RouteObject routeObject);
     }
 
     @Override
@@ -112,7 +112,7 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.MainViewHold
             @TargetApi(Build.VERSION_CODES.LOLLIPOP)
             @Override
             public void onClick(View v) {
-                mOnClickListener.onClick(mLocationObject, mRoute, v ,v.getTransitionName());
+                mOnClickListener.onClick(mRoute);
             }
         });
     }

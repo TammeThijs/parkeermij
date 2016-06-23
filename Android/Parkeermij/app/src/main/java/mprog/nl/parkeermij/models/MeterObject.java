@@ -44,5 +44,13 @@ public class MeterObject implements Serializable {
     public void setSellingPointId(String sellingPointId) {
         mSellingPointId = sellingPointId;
     }
+
+    public CoordinatesWrapper getCoordinates() {
+        return mCoordinates;
+    }
+
+    public void setCoordinates(CoordinatesWrapper coordinates) {
+        mCoordinates = coordinates;
+    }
 }
 

@@ -23,5 +23,5 @@
         android:fitsSystemWindows="true"
         app:itemIconTint="@color/navigation_selector"
         app:itemTextColor="@color/navigation_selector"
-        app:menu="@menu/activity_navigation_test_drawer"/>
+        app:menu="@menu/navigation_drawer_menu"/>
 </android.support.v4.widget.DrawerLayout>

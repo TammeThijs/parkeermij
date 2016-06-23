@@ -15,7 +15,10 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -42,7 +45,10 @@ public class BaseActivity extends AppCompatActivity implements BaseActivityView,
     public static final String METERS = "meters";
 
     private List<RouteObject> mRouteObjects;
+    private List<LatLng> mMeterObjects;
     private LocationObject mLocationObject;
+    private RoutesListFragment mRoutesListFragment;
+
 
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
@@ -56,8 +62,7 @@ public class BaseActivity extends AppCompatActivity implements BaseActivityView,
     @Inject
     BaseActivityPresenter mPresenter;
 
-    public static Intent newIntent(Context context, Location location, List<RouteObject> routeObjects,
-                                   List<MeterObject> meterObjects) {
+    public static Intent newIntent(Context context, Location location, List<RouteObject> routeObjects) {
         Intent intent = new Intent(context, BaseActivity.class);
         Bundle extras = new Bundle();
 
@@ -66,7 +71,6 @@ public class BaseActivity extends AppCompatActivity implements BaseActivityView,
 
         extras.putSerializable(LOCATION, mLocation);
         extras.putSerializable(ROUTES, (Serializable) routeObjects);
-        extras.putSerializable(METERS, (Serializable) meterObjects);
         intent.putExtras(extras);
 
         return intent;
@@ -104,34 +108,59 @@ public class BaseActivity extends AppCompatActivity implements BaseActivityView,
     }
 
     @Override
-    public void showMap(List<RouteObject> routeList, LocationObject locationObject) {
+    public void showMap() {
 
-        mRouteObjects = routeList;
-        mLocationObject = locationObject;
+        showOverflowMenu(true);
+        if (getCurrentFragment() instanceof RoutesListFragment) {
+            getSupportFragmentManager().beginTransaction()
+                    .remove(mRoutesListFragment)
+                    .commit();
+        } else {
+            Fragment mapsFragment = MapsFragment.newInstance(this, mLocationObject, mRouteObjects,
+                    mMeterObjects);
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.content, mapsFragment)
+                    .commit();
+        }
+    }
 
-        Fragment mapsFragment = MapsFragment.newInstance(this, locationObject, routeList);
-
-
+    @Override
+    public void showRoutes() {
+        showOverflowMenu(false);
+        mRoutesListFragment = RoutesListFragment.newInstance(mRouteObjects, mLocationObject);
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.content, mapsFragment, MapsFragment.FRAGMENT_TAG)
+                .add(R.id.content, mRoutesListFragment)
                 .commit();
     }
 
     @Override
-    public LocationObject getLocation() {
-        return mLocationObject;
+    public void setData(List<RouteObject> routeList, LocationObject locationObject) {
+        mRouteObjects = routeList;
+        mLocationObject = locationObject;
     }
 
-    public void showRoutes(List<RouteObject> routes) {
 
-        Fragment routefragment = RoutesListFragment.newInstance(routes);
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.content, routefragment, RoutesListFragment.FRAGMENT_TAG)
-                .commit();
+    /**
+     * Load list with meters into fragment
+     *
+     * @param meters
+     */
+    @Override
+    public void setMeterdata(List<MeterObject> meters) {
+        List<LatLng> temp = new ArrayList<>();
+
+        for (MeterObject meter : meters) {
+            String[] coordinates = meter.getCoordinates().getCoordinates();
+            temp.add(new LatLng(Double.parseDouble(coordinates[1]),
+                    Double.parseDouble(coordinates[0])));
+        }
+        mMeterObjects = temp;
+        showMap(); // load map if all data is gathered
     }
 
     /**
      * return active fragment in baseactivity
+     *
      * @return
      */
     private Fragment getCurrentFragment() {
@@ -151,24 +180,8 @@ public class BaseActivity extends AppCompatActivity implements BaseActivityView,
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.toolbar_menu, menu);
-        SharedPreferences settings = getSharedPreferences("settings", 0);
-
-        boolean isCheckedMeter = settings.getBoolean("meterbox", false);
-        boolean isCheckedGarage = settings.getBoolean("garagebox", false);
-
-        MenuItem item = menu.findItem(R.id.meters);
-        item.setChecked(isCheckedMeter);
-
-        item = menu.findItem(R.id.garages);
-        item.setChecked(isCheckedGarage);
-        return true;
-    }
-
     /**
-     * Toolbar menu ItemSelected. Settings are stored in sharedprefs.
+     * Toolbar menu ItemSelected. Settings are stored in sharedprefs.     *
      *
      * @param item
      * @return
@@ -176,16 +189,21 @@ public class BaseActivity extends AppCompatActivity implements BaseActivityView,
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         item.setChecked(!item.isChecked());
-        SharedPreferences settings = getSharedPreferences("settings", 0);
+        SharedPreferences settings = getSharedPreferences(getString(R.string.shared_settings), 0);
         SharedPreferences.Editor editor = settings.edit();
 
         switch (item.getItemId()) {
             case R.id.garages:
-                editor.putBoolean("garagebox", item.isChecked());
+                editor.putBoolean(getString(R.string.show_garages), item.isChecked());
                 break;
             case R.id.meters:
-                editor.putBoolean("meterbox", item.isChecked());
+                editor.putBoolean(getString(R.string.show_meters), item.isChecked());
                 break;
+            case R.id.afstand:
+                editor.putBoolean(getString(R.string.sort_distance), true);
+                break;
+            case R.id.prijs:
+                editor.putBoolean(getString(R.string.sort_distance), false);
             default:
                 break;
         }
@@ -197,6 +215,7 @@ public class BaseActivity extends AppCompatActivity implements BaseActivityView,
         }
         if (currentFragment instanceof RoutesListFragment) {
             ((RoutesListFragment) currentFragment).filterList();
+
         }
         return super.onOptionsItemSelected(item);
     }
@@ -204,16 +223,61 @@ public class BaseActivity extends AppCompatActivity implements BaseActivityView,
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
-        int id = item.getItemId();
 
-        if (id == R.id.maps) {
-            showMap(mRouteObjects, mLocationObject);
-        } else if (id == R.id.routes) {
-            showRoutes(mRouteObjects);
+        // NavigationView Onclick.
+        switch (item.getItemId()) {
+            case R.id.maps:
+                // only show map if current fragment isnt map
+                if (getCurrentFragment() instanceof RoutesListFragment) {
+                    showMap();
+                }
+                break;
+            case R.id.routes:
+                // only show routes if current fragment isnt routes
+                if (getCurrentFragment() instanceof MapsFragment) {
+                    showRoutes();
+                }
+                break;
+            default:
+                break;
         }
+
         // close drawer
         mDrawerLayout.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.toolbar_menu, menu);
+        SharedPreferences settings = getSharedPreferences(getString(R.string.shared_settings), 0);
+
+        boolean isCheckedMeter = settings.getBoolean(getString(R.string.show_meters), false);
+        boolean isCheckedGarage = settings.getBoolean(getString(R.string.show_garages), false);
+        boolean isDistanceSort = settings.getBoolean(getString(R.string.sort_distance), false);
+
+        MenuItem mItemMeters = menu.findItem(R.id.meters);
+        mItemMeters.setChecked(isCheckedMeter);
+
+        MenuItem mItemGarages = menu.findItem(R.id.garages);
+        mItemGarages.setChecked(isCheckedGarage);
+
+        if(isDistanceSort){
+            MenuItem mItemDistance = menu.findItem(R.id.afstand);
+            mItemDistance.setChecked(true);
+        } else {
+            MenuItem mItemPrijs = menu.findItem(R.id.prijs);
+            mItemPrijs.setChecked(true);
+        }
+
+
+
+        return true;
+    }
+
+    public void showOverflowMenu(boolean showMenu) {
+        if (mToolbar.getMenu() != null)
+            mToolbar.getMenu().setGroupVisible(R.id.mapsmenu, showMenu);
+        mToolbar.getMenu().setGroupVisible(R.id.routesmenu, !showMenu);
     }
 }

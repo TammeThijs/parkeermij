@@ -1,9 +1,12 @@
 package mprog.nl.parkeermij.fragments;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,11 +25,16 @@ import mprog.nl.parkeermij.models.RouteObject;
  * TODO
  */
 public class RoutesListFragment extends Fragment implements RouteAdapter.OnClickListener {
+
     private static final String ROUTES = "routes";
-    public static final String FRAGMENT_TAG = "routelistfragment";
+    public static final String START_LOCATION = "startlocation";
+    public static final String TAG = "routelistfragment";
+    public static final String BASE_URL = "http://maps.google.com/maps?";
+
 
     private RouteAdapter mAdapter;
     private List<RouteObject> mList;
+    private LocationObject mLocationObject;
 
     @BindView(R.id.recyclerview_wrapper)
     RecyclerView mRecyclerView;
@@ -39,22 +47,24 @@ public class RoutesListFragment extends Fragment implements RouteAdapter.OnClick
      * @param routes list of all parking locations nearby.
      * @return A new instance of fragment RoutesListFragment.
      */
-    public static RoutesListFragment newInstance(List<RouteObject> routes) {
+    public static RoutesListFragment newInstance(List<RouteObject> routes,
+                                                 LocationObject locationObject) {
 
         RoutesListFragment fragment = new RoutesListFragment();
-        Bundle args = new Bundle();
-        args.putSerializable(ROUTES, (Serializable) routes);
-        fragment.setArguments(args);
+        Bundle extras = new Bundle();
+        extras.putSerializable(ROUTES, (Serializable) routes);
+        extras.putSerializable(START_LOCATION, locationObject);
+        fragment.setArguments(extras);
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         if (getArguments() != null) {
             Bundle extras = getArguments();
-             mList= (List<RouteObject>) extras.getSerializable(ROUTES);
+            mList = (List<RouteObject>) extras.getSerializable(ROUTES);
+            mLocationObject = (LocationObject) extras.getSerializable(START_LOCATION);
         }
     }
 
@@ -68,25 +78,36 @@ public class RoutesListFragment extends Fragment implements RouteAdapter.OnClick
         return view;
     }
 
-    public void init(){
+    public void init() {
 
         mAdapter = new RouteAdapter(getActivity());
-        mAdapter.setItems(mList, this ,new LocationObject(0,0));
+        mAdapter.setItems(mList, this);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.setAdapter(mAdapter);
     }
 
-    public void filterList(){
+    public void filterList() {
         mAdapter.filterRoutes();
     }
 
     @Override
-    public void onDetach() {
-        super.onDetach();
+    public void onClick(RouteObject routeObject) {
+        Log.d("clicked", "onClick: CLICKED" + routeObject.getCost());
+        startRouteMaps(routeObject);
     }
 
-    @Override
-    public void onClick(LocationObject location, RouteObject routeObject, View view, String transition) {
+    public void startRouteMaps(RouteObject routeObject) {
 
+        String saddr = "saddr=" + String.valueOf(mLocationObject.getLatitude())
+                + "," + String.valueOf(mLocationObject.getLongitude());
+        String daddr = "&daddr=" + routeObject.getLatitude() + "," + routeObject.getLongitude();
+        String URL = BASE_URL + saddr + daddr;
+        Log.d(TAG, "startRouteMaps: " + URL);
+
+
+        Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
+                Uri.parse(URL));
+        startActivity(intent);
     }
 }
+

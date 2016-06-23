@@ -1,8 +1,14 @@
 package mprog.nl.parkeermij.MVP.interactors;
 
+import java.util.List;
+
+import mprog.nl.parkeermij.MVP.interfaces.ResponseListener;
+import mprog.nl.parkeermij.models.LocationObject;
+import mprog.nl.parkeermij.models.MeterObject;
+
 /**
  * Created by Tamme on 31-5-2016.
  */
 public interface BaseActivityInteractor {
-
+    void getParkMeters(ResponseListener<List<MeterObject>> listener, LocationObject locationObject);
 }

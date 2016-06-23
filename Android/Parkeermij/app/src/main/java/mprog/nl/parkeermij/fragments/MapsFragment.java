@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,13 +15,11 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptor;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.PolygonOptions;
+import com.google.maps.android.clustering.ClusterManager;
 
 import java.io.Serializable;
 import java.util.List;
@@ -30,7 +27,9 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import mprog.nl.parkeermij.R;
+import mprog.nl.parkeermij.helpers.CustomRenderer;
 import mprog.nl.parkeermij.helpers.PolygonHelper;
+import mprog.nl.parkeermij.models.ClusterObject;
 import mprog.nl.parkeermij.models.LocationObject;
 import mprog.nl.parkeermij.models.RouteObject;
 
@@ -40,9 +39,10 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
     public static final String TAG = "MapActivity";
     public static final String LOCATION = "location";
     public static final String ROUTE = "routes";
-    public static final String FRAGMENT_TAG = "MAPS_FRAGMENT";
+    public static final String METERS = "meters";
     public static final float MAX_ZOOM = 12.0f;
 
+    // Parking Zones
     public static final int ZONE1 = 0;
     public static final int ZONE2 = 1;
     public static final int ZONE3 = 2;
@@ -58,19 +58,25 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
     private PolygonHelper mPolygonHelper;
     private List<List<List<LatLng>>> mAreaList;
     private SupportMapFragment mSupportMapFragment;
-    private LocationObject startLocation;
-    private List<RouteObject> parkLocations;
+    private LocationObject mStartLocation;
+    private List<RouteObject> mParkLocations;
+    private List<LatLng> mMeterLocations;
+    private ClusterManager mClusterManager;
+    private boolean isAreaSet = false;
 
     public MapsFragment() {
         // required empty constructor
     }
 
-    public static MapsFragment newInstance(Context context, LocationObject location, List<RouteObject> routeObject) {
+    public static MapsFragment newInstance(Context context, LocationObject location,
+                                           List<RouteObject> routeObject,
+                                           List<LatLng> meters) {
         MapsFragment fragment = new MapsFragment();
         Bundle extras = new Bundle();
 
         extras.putSerializable(LOCATION, location);
         extras.putSerializable(ROUTE, (Serializable) routeObject);
+        extras.putSerializable(METERS, (Serializable) meters);
         fragment.setArguments(extras);
 
         return fragment;
@@ -81,11 +87,12 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
         super.onCreate(savedInstanceState);
 
         mPolygonHelper = new PolygonHelper(getActivity());
-
+        // retrieve bundle
         if (getArguments() != null) {
             Bundle extras = getArguments();
-            startLocation = (LocationObject) extras.getSerializable(LOCATION);
-            parkLocations = (List<RouteObject>) extras.getSerializable(ROUTE);
+            mStartLocation = (LocationObject) extras.getSerializable(LOCATION);
+            mParkLocations = (List<RouteObject>) extras.getSerializable(ROUTE);
+            mMeterLocations = (List<LatLng>) extras.getSerializable(METERS);
         }
     }
 
@@ -107,43 +114,62 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+        // set maps to current location
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(mStartLocation.getLatitude(),
+                mStartLocation.getLongitude()), 14));
+        mClusterManager = new ClusterManager<>(getActivity(), mMap);
+        mClusterManager.setRenderer(new CustomRenderer(getActivity(), mMap, mClusterManager));
+
+        // Map settings
         mMap.setOnCameraChangeListener(this);
         mMap.setMyLocationEnabled(true);
+        mMap.getUiSettings().setCompassEnabled(false);
+        mMap.getUiSettings().setRotateGesturesEnabled(false);
+        mMap.getUiSettings().setTiltGesturesEnabled(false);
+
+        mMap.setOnCameraChangeListener(mClusterManager);
+//        mMap.setOnMarkerClickListener(mClusterManager);
 
         setMarkers();
-        // set maps to current location
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(startLocation.getLatitude(),
-                startLocation.getLongitude()), 14));
     }
 
     public void setMarkers() {
         // clear markers
-        mMap.clear();
+        mClusterManager.clearItems();
 
         // load settings
         SharedPreferences settings = getActivity().getSharedPreferences("settings", 0);
         boolean isCheckedMeter = settings.getBoolean("meterbox", false);
         boolean isCheckedGarage = settings.getBoolean("garagebox", false);
 
-        // custom markers
-        BitmapDescriptor meter = BitmapDescriptorFactory.fromResource(R.drawable.parkmeter);
-        BitmapDescriptor garage = BitmapDescriptorFactory.fromResource(R.drawable.garage);
 
-        for (RouteObject route : parkLocations) {
+        for (RouteObject route : mParkLocations) {
 
-            boolean isChecked = route.getType().equals("garage") ? isCheckedGarage : isCheckedMeter;
-
-            if (isChecked) {
+            if (isCheckedGarage) {
                 Double lat = Double.parseDouble(route.getLatitude());
                 Double lon = Double.parseDouble(route.getLongitude());
 
-                BitmapDescriptor icon = route.getType().equals("garage") ? garage : meter;
-                mMap.addMarker(new MarkerOptions().position(new LatLng(lat,
-                        lon)).icon(icon).title(route.getName()).snippet(route.getAddress()));
+
+                mClusterManager.addItem(new ClusterObject(lat, lon));
             }
         }
+        if (isCheckedMeter) {
+            for (LatLng meterCoordinates : mMeterLocations) {
+                // TODO VRAGEN OF NODIG
+                if (meterCoordinates.longitude < (mStartLocation.getLongitude() + 0.01)
+                        && meterCoordinates.longitude > mStartLocation.getLongitude() - 0.01) {
+                    if (meterCoordinates.latitude < (mStartLocation.getLatitude() + 0.005)
+                            && meterCoordinates.latitude > mStartLocation.getLatitude() - 0.005) {
+                    }
+                }
+                mClusterManager.addItem(new ClusterObject(meterCoordinates));
+            }
 
-        setAreas();
+        }
+        mClusterManager.cluster();
+        if (!isAreaSet) {
+            setAreas();
+        }
     }
 
     public void setAreas() {
@@ -186,19 +212,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
                         .fillColor(transparent));
             }
         }
-    }
-
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        Log.d(TAG, "onPause: CALLED");
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        Log.d(TAG, "onDetach: CALLED");
+        isAreaSet = true;
     }
 
     /**

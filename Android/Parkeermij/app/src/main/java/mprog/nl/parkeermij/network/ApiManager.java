@@ -34,7 +34,6 @@ public class ApiManager {
 
     private static final Retrofit PARKMETER_ADAPTER = new Retrofit.Builder()
             .baseUrl("https://opendata.rdw.nl")
-            .client(client)
             .addConverterFactory(GsonConverterFactory.create(gson))
             .build();
 

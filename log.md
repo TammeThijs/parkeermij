@@ -65,8 +65,8 @@
 - afwezig ivm zaken familie
 
 #####day15
--presentaties
-- API toont kuren
+- presentaties
+- API toont kuren, data incompleet
 
 #####day16
 - API geeft geen meters meer terug, alleen garages
@@ -75,6 +75,16 @@
 - Dataset RDW MAP: https://opendata.rdw.nl/Parkeren/Open-Data-Parkeren-KAART-PARKEERGEBIEDEN/7sqe-3mca
 - Dataset RDW Polygon points: https://opendata.rdw.nl/Parkeren/Open-Data-Parkeren-GEOMETRIE-GEBIED/nsk3-v9n7
 - Tariefen amsterdam: https://www.amsterdam.nl/parkeren-verkeer/parkeertarieven/
+- Stadsdelen hardcoded laten zien op maps
+- Erg veel performance issues door deze aanpassing, opzoek naar oplossingen om de app 'smooth' te laten aanvoelen voor gebruiker
+
+#####day17
+- Aantal performance changes gemaakt
+- Oplossing gevonden voor behouden van map fragment wanneer een ander fragment wordt opgevraagd (deze wordt er nu overheen gelegd ipv replaced)
+- Een nieuwe API gebruikt om parkeerpalen op te halen, helaas bevat deze alleen coordinaten en geen informatie qua prijs/tijden etc
+- Nieuwe API
+
+https://code.google.com/p/gmaps-api-issues/issues/detail?id=9765
 
 
 

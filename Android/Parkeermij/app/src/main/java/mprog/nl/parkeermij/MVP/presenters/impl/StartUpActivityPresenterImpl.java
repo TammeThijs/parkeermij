@@ -10,7 +10,6 @@ import mprog.nl.parkeermij.MVP.presenters.StartUpActivityPresenter;
 import mprog.nl.parkeermij.MVP.views.StartUpActivityView;
 import mprog.nl.parkeermij.R;
 import mprog.nl.parkeermij.models.LocationObject;
-import mprog.nl.parkeermij.models.MeterObject;
 import mprog.nl.parkeermij.models.RouteObject;
 
 /**
@@ -43,25 +42,12 @@ public class StartUpActivityPresenterImpl implements StartUpActivityPresenter {
     @Override
     public void getData(LocationObject locationObject) {
         mInteractor.getRoutes(mRouteResponseListener, locationObject);
-        mInteractor.getParkMeters(mMeterResponseListener, locationObject);
     }
 
     private ResponseListener<List<RouteObject>> mRouteResponseListener = new ResponseListener<List<RouteObject>>() {
         @Override
         public void success(List<RouteObject> routeObjects) {
-            mView.startRoutesActivity(routeObjects, null);
-        }
-
-        @Override
-        public void fail(String error) {
-            mView.toggleSnackbar("Fout bij ophalen data");
-        }
-    };
-
-    private ResponseListener<List<MeterObject>> mMeterResponseListener = new ResponseListener<List<MeterObject>>() {
-        @Override
-        public void success(List<MeterObject> response) {
-            mView.startRoutesActivity(null, response);
+            mView.startRoutesActivity(routeObjects);
         }
 
         @Override
