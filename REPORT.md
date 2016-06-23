@@ -85,15 +85,43 @@ De eerste grote uitdagingen was het gebruik van retrofit en het aanhouden van de
 
 De tweede, wat vervelendere, uitdaging is dat in het begin van week 4 de originele API (parkshark) incomplete data teruggaf. Waarbij ik namelijk in de eerste 3 weken zowel meters als garages terug kreeg bleken dit nu alleen nog maar garages te zijn. Hierdoor viel een groot deel van mijn functionaliteit weg en heb ik er uiteindelijk voor gekozen om via de RDW API locaties van parkeerpalen op te halen, deze API geeft echter in tegenstelling tot de eerste niets terug qua tijd/kosten/afstand. Om de gebruiker toch een indicatie te geven van parkeerkosten heb ik via polygon lines gebieden getekend op de google maps fragment. Deze polygon lines heb ik (helaas) hard-coded moeten implementeren vanuit een RDW open database set, denk hierbij aan 7 uur lang arrays copy-pasten...
 
-Een uitdaging die zich hieruit vormde was het feit dat de nieuwe API gebruik maakte van SoQL queries, dit zijn queries waarbij een '?' wordt gebruikt in de URL. Momenteel bevind zich er een 'bug' in retrofit waarbij het niet mogelijk is om encoding van URLs uit te zetten en het voor mij dus niet mogelijk was parkeermeters op te halen rond de eigen locatie van de gebruiker, vandaar dat ik uiteindelijk gekozen heb om binnen een radius van 10km alle parkeermeters van centrum Amsterdam op te halen. Wanneer het wel mogelijk is om encoding uit te zetten is het mogelijk om veel gerichter de locaties van parkeermeters te tonen en kan het aantal getoonde meters om laag wat voor een betere gebruikerservaring zorgd.
+Een extra uitdaging die zich hieruit vormde was het feit dat de nieuwe API gebruik maakte van SoQL queries, dit zijn queries waarbij een '?' wordt gebruikt in de URL. Momenteel bevind zich er een 'bug' in retrofit waarbij het niet mogelijk is om encoding van URLs uit te zetten en het voor mij dus niet mogelijk was parkeermeters op te halen rond de eigen locatie van de gebruiker, vandaar dat ik uiteindelijk gekozen heb om binnen een radius van 10km alle parkeermeters van centrum Amsterdam op te halen. Wanneer het wel mogelijk is om encoding uit te zetten is het mogelijk om veel gerichter de locaties van parkeermeters te tonen en kan het aantal getoonde meters om laag wat voor een betere gebruikerservaring zorgd.
+(https://github.com/square/retrofit/issues/1199)
 
 De derde uitdaging die als een rode draad door deze app loopt is performance;
 - Origneel had ik gekozen om normale google maps fragments te tonen binnen de recyclerview, iets wat logisch zorgde voor erg veel stutter. De oplossing hiervoor was dus het gebruik van statische maps en handmatig de routefunctie in GoogleMaps starten.
 - het ophalen van data splits ik nu tussen de twee activities om twee redenen; het doorsturen van alle parkeermeter locaties (1000+ items) tussen intents via serialized items is erg zwaar, en doordat het asynchroon gebeurd kan het prima tijdens het starten van de BaseActivity en scheelt tijd tijdens de eerste activity.
 - Het switchen tussen fragments was in het begin erg zwaar, oa door het onthouden of opnieuw maken van de maps activity. De uiteindelijk gekozen oplossing was de MapsFragment nooit af te sluiten en de (veel lichtere) RouteListFragment hier gewoon voor te plaatsen.
-- het tonen/aanpassen van heel veel markers i.c.m. de parkeerzones, uiteindelijk heeft Google Maps Utils me hierbij geholpen.
+- het tonen/aanpassen van heel veel markers i.c.m. de parkeerzones, uiteindelijk heeft Google Maps Utils me hierbij geholpen. Ook dit bracht uiteraard een uitdaging mee, inclusief het handmatig moeten updaten van de playservices door bugs aan de kant van google (https://code.google.com/p/gmaps-api-issues/issues/detail?id=9765)
 
 Al met al hebben deze uitdagingen er wel voor gezorgd dat het eindresultaat in mijn opzicht een verbetering is t.o.v het origele idee.
+
+###Referenties
+
+#####Libraries
+Retrofit (https://github.com/square/retrofit)
+- Netwerk RestClient
+- Ondersteunende libraries voor het uitpakken van JSON en URL encoding zijn OKHTTP en GSON
+
+Dagger (http://square.github.io/dagger/)
+- 'Dependancy injector', gebruikt voor het binden van verschillende lagen
+
+Butterknife (https://github.com/JakeWharton/butterknife)
+- Gebruikt voor het binden van views
+
+RippleBackground(https://github.com/skyfishjy/android-ripple-background)
+- Animatie beginscherm
+
+Google Map Utils(https://github.com/googlemaps/android-maps-utils)
+- Gebruikt voor marker clustering
+
+Picasso(http://square.github.io/picasso/)
+- Erg sterke library voor het ophalen (en cachen) van images
+
+www.stackoverflow.com
+
+
+
 
 
 
