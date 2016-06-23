@@ -17,8 +17,6 @@ import mprog.nl.parkeermij.models.RouteObject;
  */
 public class StartUpActivityPresenterImpl implements StartUpActivityPresenter {
 
-    public static final String TAG = "MainPresenter";
-
     private StartUpActivityView mView;
     private StartUpActivityInteractor mInteractor;
 
@@ -32,7 +30,7 @@ public class StartUpActivityPresenterImpl implements StartUpActivityPresenter {
     public void onClick(int id) {
         switch (id) {
             case R.id.location:
-                mView.startRoutes();
+                mView.dataCheck();
                 break;
             default:
                 break;

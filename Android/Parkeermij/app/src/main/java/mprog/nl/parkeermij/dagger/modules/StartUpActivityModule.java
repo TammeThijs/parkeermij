@@ -10,6 +10,7 @@ import mprog.nl.parkeermij.MVP.views.StartUpActivityView;
 
 /**
  * Created by Tamme on 31-5-2016.
+ * Dagger for layer binding
  */
 @Module
 public class StartUpActivityModule {

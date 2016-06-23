@@ -6,8 +6,7 @@ import java.util.List;
 
 /**
  * Created by Tamme on 7-6-2016.
- *
- * wrapper for RouteObject object *
+ * wrapper for RouteObject object
  */
 public class RouteList {
 

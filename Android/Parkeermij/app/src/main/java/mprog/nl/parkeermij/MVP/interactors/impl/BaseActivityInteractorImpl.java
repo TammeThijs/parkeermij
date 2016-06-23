@@ -1,7 +1,5 @@
 package mprog.nl.parkeermij.MVP.interactors.impl;
 
-import android.util.Log;
-
 import java.util.List;
 
 import mprog.nl.parkeermij.MVP.interactors.BaseActivityInteractor;
@@ -28,7 +26,6 @@ public class BaseActivityInteractorImpl implements BaseActivityInteractor {
 
         // call asychronous
         Call<List<MeterObject>> call = ApiManager.getMeterService().getMeters();
-        Log.d("netwerk", "getParkMeters: "+call.request().url());
         call.enqueue(new Callback<List<MeterObject>>() {
             @Override
             public void onResponse(Call<List<MeterObject>> call, Response<List<MeterObject>> response) {

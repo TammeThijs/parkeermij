@@ -135,12 +135,4 @@ public class RouteObject implements Serializable {
         mGarageUrl = garageUrl;
     }
 
-
-     //  custom getter used for parsing string coordinates to doubles
-    public LocationObject getGPSLocation(){
-        double lat = Double.parseDouble(getLatitude());
-        double lon = Double.parseDouble(getLongitude());
-
-        return new LocationObject(lat, lon);
-    }
 }

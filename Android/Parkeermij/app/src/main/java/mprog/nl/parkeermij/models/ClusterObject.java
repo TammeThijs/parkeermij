@@ -5,6 +5,7 @@ import com.google.maps.android.clustering.ClusterItem;
 
 /**
  * Created by Tamme on 22-6-2016.
+ * model that extends cluster item so it can be used by Google Maps Utisl
  */
 public class ClusterObject implements ClusterItem {
     private final LatLng mPosition;

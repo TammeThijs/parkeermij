@@ -3,7 +3,7 @@ package mprog.nl.parkeermij.models;
 import java.io.Serializable;
 
 /**
- * Created by Prins Tamme on 2-6-2016.
+ * Created by Tamme on 2-6-2016.
  */
 public class LocationObject implements Serializable {
 
@@ -19,15 +19,9 @@ public class LocationObject implements Serializable {
         return mLatitude;
     }
 
-    public void setLatitude(double latitude) {
-        mLatitude = latitude;
-    }
 
     public double getLongitude() {
         return mLongitude;
     }
 
-    public void setLongitude(double longitude) {
-        mLongitude = longitude;
-    }
 }

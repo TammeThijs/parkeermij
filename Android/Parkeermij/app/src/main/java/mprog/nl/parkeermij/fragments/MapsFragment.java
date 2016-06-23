@@ -1,6 +1,5 @@
 package mprog.nl.parkeermij.fragments;
 
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -36,7 +35,6 @@ import mprog.nl.parkeermij.models.RouteObject;
 public class MapsFragment extends Fragment implements OnMapReadyCallback,
         GoogleMap.OnCameraChangeListener {
 
-    public static final String TAG = "MapActivity";
     public static final String LOCATION = "location";
     public static final String ROUTE = "routes";
     public static final String METERS = "meters";
@@ -68,7 +66,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
         // required empty constructor
     }
 
-    public static MapsFragment newInstance(Context context, LocationObject location,
+    public static MapsFragment newInstance(LocationObject location,
                                            List<RouteObject> routeObject,
                                            List<LatLng> meters) {
         MapsFragment fragment = new MapsFragment();
@@ -82,6 +80,10 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
         return fragment;
     }
 
+    /**
+     * retrieve data before creating view
+     * @param savedInstanceState
+     */
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -102,6 +104,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
         View view = inflater.inflate(R.layout.fragment_maps, container, false);
         ButterKnife.bind(this, view);
 
+        // create map
         if (mSupportMapFragment == null) {
             mSupportMapFragment = ((SupportMapFragment) getChildFragmentManager()
                     .findFragmentById(R.id.map));
@@ -111,12 +114,18 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
         return view;
     }
 
+    /**
+     * Setup GoogleMap
+     * @param googleMap
+     */
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         // set maps to current location
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(mStartLocation.getLatitude(),
                 mStartLocation.getLongitude()), 14));
+
+        //Initialize Google Maps Utils
         mClusterManager = new ClusterManager<>(getActivity(), mMap);
         mClusterManager.setRenderer(new CustomRenderer(getActivity(), mMap, mClusterManager));
 
@@ -142,6 +151,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
         boolean isCheckedMeter = settings.getBoolean(getActivity().getString(R.string.show_meters), false);
         boolean isCheckedGarage = settings.getBoolean(getActivity().getString(R.string.show_garages), false);
 
+        // add markers depending on settings
         if (isCheckedGarage) {
             for (RouteObject route : mParkLocations) {
                 Double lat = Double.parseDouble(route.getLatitude());
@@ -152,17 +162,12 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
         }
         if (isCheckedMeter) {
             for (LatLng meterCoordinates : mMeterLocations) {
-                // TODO VRAGEN OF NODIG
-                if (meterCoordinates.longitude < (mStartLocation.getLongitude() + 0.01)
-                        && meterCoordinates.longitude > mStartLocation.getLongitude() - 0.01) {
-                    if (meterCoordinates.latitude < (mStartLocation.getLatitude() + 0.005)
-                            && meterCoordinates.latitude > mStartLocation.getLatitude() - 0.005) {
-                    }
-                }
+                // already Latlng object
                 mClusterManager.addItem(new ClusterObject(meterCoordinates));
             }
 
         }
+        // set clustered markers
         mClusterManager.cluster();
 
         // Set areas if needed
@@ -171,6 +176,10 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
         }
     }
 
+    /**
+     * Paints polygon lines to display parking areas within amsterdam
+     *
+     */
     public void setAreas() {
 
         int normal = 0;
@@ -179,6 +188,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
 
         for (int zone = 0; zone < mAreaList.size(); zone++) {
 
+            // Pick colors
             if (zone == ZONE1) {
                 normal = ContextCompat.getColor(getContext(), R.color.zone1);
                 transparent = ContextCompat.getColor(getContext(), R.color.zone1_transparent);
@@ -202,6 +212,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
                 transparent = ContextCompat.getColor(getContext(), R.color.zone7_transparent);
             }
 
+            // paint zones
             for (int subzone = 0; subzone < mAreaList.get(zone).size(); subzone++) {
 
                 Polygon polygon = mMap.addPolygon(new PolygonOptions()
@@ -211,6 +222,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
                         .fillColor(transparent));
             }
         }
+        // mark area is painted
         isAreaSet = true;
     }
 

@@ -6,6 +6,7 @@ import java.io.Serializable;
 
 /**
  * Created by Tamme on 21-6-2016.
+ * Wrapper used for retrieve GSON
  */
 public class CoordinatesWrapper implements Serializable {
 
@@ -16,7 +17,4 @@ public class CoordinatesWrapper implements Serializable {
         return mCoordinates;
     }
 
-    public void setCoordinates(String[] coordinates) {
-        mCoordinates = coordinates;
-    }
 }

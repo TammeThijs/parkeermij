@@ -71,6 +71,12 @@ public class BaseActivityPresenterImpl implements BaseActivityPresenter {
     }
 
 
+    /**
+     * Update menu and apply changes in shared preferences
+     * @param id
+     * @param context
+     * @param isChecked
+     */
     @Override
     public void onOptionsItemSelected(int id, Context context, boolean isChecked) {
         SharedPreferences settings = context.getSharedPreferences(context

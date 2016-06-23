@@ -21,33 +21,37 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import mprog.nl.parkeermij.R;
-import mprog.nl.parkeermij.models.LocationObject;
 import mprog.nl.parkeermij.models.RouteObject;
 
 /**
  * Created by Tamme on 8-6-2016.
+ * Adapter used for populating recyclerview
  */
 public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.MainViewHolder>{
 
-    public static final String TAG = "RouteAdapter";
     private List<RouteObject> mRoutes;
     private List<RouteObject> mRoutesAll;
     private Context mContext;
-    private LocationObject mLocationObject;
     private String URL_MAPS_STATIC = "";
     private OnClickListener mOnClickListener;
 
+    // constructor
     public RouteAdapter(Context context) {
         mContext = context;
+        // static base URL
         URL_MAPS_STATIC = mContext.getString(R.string.maps_static_url);
     }
 
+    // load items
     public void setItems(List<RouteObject> routes, OnClickListener listener) {
         mRoutesAll = routes;
         mOnClickListener = listener;
         filterRoutes();
     }
 
+    /**
+     * Filter list used in recyclerview depending on settings
+     */
     public void filterRoutes(){
         mRoutes = new ArrayList<>();
 
@@ -85,12 +89,18 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.MainViewHold
         return new MainViewHolder(view);
     }
 
+    /**
+     * Set content for each item
+     * @param holder
+     * @param position
+     */
     @Override
     public void onBindViewHolder(MainViewHolder holder, final int position) {
         final MainViewHolder viewHolder = holder;
         final RouteObject mRoute = getItem(position);
         String mSringLocation;
 
+        // Display values
         viewHolder.mCosts.setText(new StringBuilder().append("€").append(mRoutes.get(position)
                 .getCost()).toString());
         viewHolder.mDistance.setText(new StringBuilder().append(mRoutes.get(position)
@@ -100,7 +110,8 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.MainViewHold
         // setup string for static maps
         mSringLocation = getItem(position).getLatitude() + "," + getItem(position).getLongitude();
         String URL = URL_MAPS_STATIC + mSringLocation + "&markers=|" + mSringLocation + "|";
-        
+
+        // Load image using picasso
         Picasso.with(holder.mMapView.getContext())
                 .load(URL)
                 .fit()

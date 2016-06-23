@@ -2,6 +2,7 @@ package mprog.nl.parkeermij.dagger.components;
 
 /**
  * Created by Tamme on 31-5-2016.
+ * Dagger for layer binding
  */
 
 import dagger.Component;

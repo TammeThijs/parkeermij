@@ -19,7 +19,6 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -44,11 +43,14 @@ import mprog.nl.parkeermij.dagger.modules.StartUpActivityModule;
 import mprog.nl.parkeermij.models.LocationObject;
 import mprog.nl.parkeermij.models.RouteObject;
 
+/**
+ * Tamme Thijs
+ * StartUpActivity, setting up app by retrieving GPS
+ */
 public class StartUpActivity extends AppCompatActivity implements StartUpActivityView,
         View.OnClickListener, GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
-    private static final String TAG = "StartUpActivity";
     private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
     private static final int GPS_CHECK = 999;
 
@@ -80,9 +82,11 @@ public class StartUpActivity extends AppCompatActivity implements StartUpActivit
         init();
         initDependencies();
         gpsCheck();
-
     }
 
+    /**
+     * Binding layers with dagger
+     */
     private void initDependencies() {
         DaggerStartUpActivityComponent.builder()
                 .startUpActivityModule(new StartUpActivityModule(this))
@@ -107,7 +111,8 @@ public class StartUpActivity extends AppCompatActivity implements StartUpActivit
                 .setInterval(10 * 1000)        // 10 seconds, in milliseconds
                 .setFastestInterval(1000); // 1 second, in milliseconds
 
-        startRoutes();
+        // load first fragment
+        dataCheck();
     }
 
     /**
@@ -203,8 +208,11 @@ public class StartUpActivity extends AppCompatActivity implements StartUpActivit
         }
     }
 
+    /**
+     * start if all requirements ae met
+     */
     @Override
-    public void startRoutes() {
+    public void dataCheck() {
         // double check GPS, user might have turned it off after initial check
         gpsCheck();
 
@@ -212,11 +220,12 @@ public class StartUpActivity extends AppCompatActivity implements StartUpActivit
             gpsAlert();
         } else if (mLocation == null) { // check if location exists
             toggleRipple();
-            mGoogleApiClient.connect();
+            mGoogleApiClient.connect(); // get location
         } else {
             if (!isRipple) {
                 toggleRipple();
             }
+
             mPresenter.getData(new LocationObject(mLocation.getLatitude(), mLocation.getLongitude()));
         }
     }
@@ -253,7 +262,6 @@ public class StartUpActivity extends AppCompatActivity implements StartUpActivit
     /**
      * Is called after connection with GoogleApiClient, checks permissions and if the GPS
      * returned a valid location.
-     *
      * @param bundle
      */
     @Override
@@ -267,18 +275,16 @@ public class StartUpActivity extends AppCompatActivity implements StartUpActivit
             mLocationButton.setEnabled(false);
 
         } else {
-            Log.d(TAG, "onConnected: called");
+
             // try to populate location object
             mLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
             if (mLocation == null) {
                 // keep asking API for location when location is null
                 LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient,
                         mLocationRequest, this);
-                Log.d(TAG, "onConnected: v1 called");
             } else {
                 // start next activity
-                Log.d(TAG, "onConnected: v2 called");
-                startRoutes();
+                dataCheck();
             }
         }
     }
@@ -290,8 +296,7 @@ public class StartUpActivity extends AppCompatActivity implements StartUpActivit
 
     /**
      * Called after GoogleAPIClient failed
-     * Source: http://stackoverflow.com/questions/17811720/googleplayservicesutil-error-dialog-button-does-nothing
-     *
+     * Source: http://stackoverflow.com/questions/17811720/googleplayservicesutil-error-dialog-button-does-nothing     *
      * @param connectionResult
      */
     @Override
@@ -322,13 +327,14 @@ public class StartUpActivity extends AppCompatActivity implements StartUpActivit
             return;
         }
         // update locationObject
-        Log.d(TAG, "onLocationChanged: called");
         mLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
     }
 
+    /**
+     * Disconnect if activity is paused.
+     */
     @Override
     protected void onPause() {
-        Log.d(TAG, "onPause: CALLED");
         super.onPause();
         if (mGoogleApiClient.isConnected()) {
             LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);

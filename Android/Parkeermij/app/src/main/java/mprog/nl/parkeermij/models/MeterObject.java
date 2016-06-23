@@ -6,6 +6,7 @@ import java.io.Serializable;
 
 /**
  * Created by Tamme on 20-6-2016.
+ * ParkMeterObject
  */
 public class MeterObject implements Serializable {
 

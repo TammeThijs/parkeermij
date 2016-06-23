@@ -9,6 +9,9 @@ import android.widget.LinearLayout;
 
 import mprog.nl.parkeermij.R;
 
+/**
+ * Custom LinearLayout used for round edges on google maps
+ */
 public class RoundedLinearLayout extends LinearLayout {
 
     private Path mPath;
@@ -31,7 +34,7 @@ public class RoundedLinearLayout extends LinearLayout {
 
     private void init() {
         mCornerRadius = getContext().getResources().
-                getDimensionPixelSize(R.dimen.corner_radius);
+                getDimensionPixelSize(R.dimen.corner_radius); // radius
         setWillNotDraw(false);
     }
 
@@ -43,6 +46,13 @@ public class RoundedLinearLayout extends LinearLayout {
         canvas.restore();
     }
 
+    /**
+     * Method where the actual rounding happens
+     * @param w
+     * @param h
+     * @param oldw
+     * @param oldh
+     */
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);

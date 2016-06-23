@@ -17,8 +17,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.google.android.gms.appindexing.AppIndex;
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.io.Serializable;
@@ -42,17 +40,14 @@ import mprog.nl.parkeermij.models.RouteObject;
 
 /**
  * Tamme Thijs
- * Base Activity
- *
+ * Base Activity, this activity is as base for inflating Maps and RouteList Fragment.
  */
 
 public class BaseActivity extends AppCompatActivity implements BaseActivityView,
         NavigationView.OnNavigationItemSelectedListener {
 
-    public static final String TAG = "BaseActivity";
     public static final String LOCATION = "location";
     public static final String ROUTES = "routes";
-    public static final String METERS = "meters";
 
     private List<RouteObject> mRouteObjects;
     private List<LatLng> mMeterObjects;
@@ -72,8 +67,14 @@ public class BaseActivity extends AppCompatActivity implements BaseActivityView,
     @Inject
     BaseActivityPresenter mPresenter;
 
-    private GoogleApiClient mClient;
 
+    /**
+     * Static method to start BaseActivity from another activiy
+     * @param context
+     * @param location
+     * @param routeObjects
+     * @return
+     */
     public static Intent newIntent(Context context, Location location, List<RouteObject> routeObjects) {
         Intent intent = new Intent(context, BaseActivity.class);
         Bundle extras = new Bundle();
@@ -96,9 +97,6 @@ public class BaseActivity extends AppCompatActivity implements BaseActivityView,
 
         initDependencies();
         init();
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        mClient = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
     private void initDependencies() {
@@ -123,16 +121,21 @@ public class BaseActivity extends AppCompatActivity implements BaseActivityView,
         mPresenter.init(getIntent());
     }
 
+    /**
+     * Loads MapsFragment
+     */
     @Override
     public void showMap() {
+        updateMenu(true);
 
-        showOverflowMenu(true);
+        // Remove RouteListFragment if Mapsfragment already exists
         if (getCurrentFragment() instanceof RoutesListFragment) {
             getSupportFragmentManager().beginTransaction()
                     .remove(mRoutesListFragment)
                     .commit();
         } else {
-            Fragment mapsFragment = MapsFragment.newInstance(this, mLocationObject, mRouteObjects,
+            // Init MapsFragment, only done once
+            Fragment mapsFragment = MapsFragment.newInstance(mLocationObject, mRouteObjects,
                     mMeterObjects);
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.content, mapsFragment)
@@ -140,9 +143,12 @@ public class BaseActivity extends AppCompatActivity implements BaseActivityView,
         }
     }
 
+    /**
+     * Loads RouteList Fragment
+     */
     @Override
     public void showRoutes() {
-        showOverflowMenu(false);
+        updateMenu(false);
         mRoutesListFragment = RoutesListFragment.newInstance(mRouteObjects, mLocationObject);
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.content, mRoutesListFragment)
@@ -158,13 +164,13 @@ public class BaseActivity extends AppCompatActivity implements BaseActivityView,
 
     /**
      * Load list with meters into fragment
-     *
      * @param meters
      */
     @Override
     public void setMeterdata(@Nullable List<MeterObject> meters, boolean succes) {
 
         if (succes) {
+            // convert to Latlng
             List<LatLng> temp = new ArrayList<>();
 
             for (MeterObject meter : meters) {
@@ -189,40 +195,39 @@ public class BaseActivity extends AppCompatActivity implements BaseActivityView,
     }
 
     /**
-     * Override onBackPressed to close drawer if opened
+     * Override onBackPressed to custom behaviour
      */
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        // close drawer if open
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
+            // if RouteListFragment is active go back to map
             if (getCurrentFragment() instanceof RoutesListFragment) {
                 showMap();
                 mNavigationView.getMenu().getItem(0).setChecked(true);
             } else {
+                // MapsActivity is active, close app
                 super.onBackPressed();
             }
-
         }
     }
 
-    /**
-     * Handle logic in presenter layer
-     *
-     * @param item
-     * @return
-     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        // feedback to user
         item.setChecked(!item.isChecked());
+
+        // Handle logic in presenter
         mPresenter.onOptionsItemSelected(item.getItemId(), this, item.isChecked());
 
         return super.onOptionsItemSelected(item);
     }
 
     /**
-     * If menu settings are changed refresh current fragment data
+     * If menu settings are changed refresh current fragment data.
      */
     @Override
     public void applyMenuChange() {
@@ -239,6 +244,7 @@ public class BaseActivity extends AppCompatActivity implements BaseActivityView,
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
 
+        // handle logic in presenter
         mPresenter.onNavigationItemSelected(item.getItemId(), getCurrentFragment());
         mDrawerLayout.closeDrawer(GravityCompat.START);
         return true;
@@ -246,19 +252,20 @@ public class BaseActivity extends AppCompatActivity implements BaseActivityView,
 
     /**
      * Init toolbar options menu.
-     *
      * @param menu
      * @return
      */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.toolbar_menu, menu);
-        SharedPreferences settings = getSharedPreferences(getString(R.string.shared_settings), 0);
 
+        // load settings from sharedprefs
+        SharedPreferences settings = getSharedPreferences(getString(R.string.shared_settings), 0);
         boolean isCheckedMeter = settings.getBoolean(getString(R.string.show_meters), false);
         boolean isCheckedGarage = settings.getBoolean(getString(R.string.show_garages), false);
         boolean isDistanceSort = settings.getBoolean(getString(R.string.sort_distance), false);
 
+        // apply settings
         MenuItem mItemMeters = menu.findItem(R.id.meters);
         mItemMeters.setChecked(isCheckedMeter);
 
@@ -277,7 +284,7 @@ public class BaseActivity extends AppCompatActivity implements BaseActivityView,
     }
 
     @Override
-    public void showOverflowMenu(boolean showMenu) {
+    public void updateMenu(boolean showMenu) {
         if (mToolbar.getMenu() != null) {
             mToolbar.getMenu().setGroupVisible(R.id.mapsmenu, showMenu);
             mToolbar.getMenu().setGroupVisible(R.id.routesmenu, !showMenu);
